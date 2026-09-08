@@ -6,9 +6,11 @@ Evidence-led app-review intelligence for product and customer-experience teams.
 
 Throughline explores how App Store and Google Play feedback can become
 prioritized, evidence-backed product direction. The public website is a static
-portfolio build: it replays the intended analysis experience using redacted
+portfolio build: it replays the intended analysis experience using cached
 demonstration snapshots, so visitors cannot trigger external APIs or consume
-model credits.
+model credits. Aggregate metrics and themes are retained from analyses of
+public app reviews; reviewer identities are removed and displayed evidence is
+paraphrased rather than quoted verbatim.
 
 This repository also includes a sanitized extraction of the Python pipeline
 behind the working prototype. The implementation is real; credentials, raw
@@ -55,8 +57,10 @@ Dashboard snapshot → React portfolio experience
 - **Validation, not false certainty:** Spearman correlation checks whether model
   sentiment moves with ordinal star ratings. Small samples are reported as
   untestable.
-- **Privacy by construction:** the public reference implementation omits author
-  identity. Its committed sample data is entirely synthetic.
+- **Privacy by construction:** cached portfolio snapshots retain aggregate
+  analysis while removing reviewer identity and replacing verbatim evidence
+  with theme-level paraphrases. The separate runnable sample in `sample_data/`
+  is entirely synthetic.
 
 ## Run the portfolio
 
