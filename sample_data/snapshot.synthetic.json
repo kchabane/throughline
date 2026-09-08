@@ -1,0 +1,74 @@
+{
+  "generated_at": "2026-09-08T00:00:00+00:00",
+  "window": {
+    "since": "2026-08-09T00:00:00+00:00",
+    "review_count": 12
+  },
+  "kpis": {
+    "n_reviews": 12,
+    "nss": 8.3,
+    "rating_alignment": {
+      "testable": true,
+      "n": 12,
+      "spearman_rho": 0.982,
+      "p_value": 0.0
+    }
+  },
+  "weekly": [
+    {
+      "start": "2026-08-11",
+      "end": "2026-08-17",
+      "n_reviews": 3,
+      "avg_rating": 2.33,
+      "nss": -33.3
+    },
+    {
+      "start": "2026-08-18",
+      "end": "2026-08-24",
+      "n_reviews": 3,
+      "avg_rating": 3.33,
+      "nss": 0.0
+    },
+    {
+      "start": "2026-08-25",
+      "end": "2026-08-31",
+      "n_reviews": 2,
+      "avg_rating": 3.0,
+      "nss": 0.0
+    },
+    {
+      "start": "2026-09-01",
+      "end": "2026-09-07",
+      "n_reviews": 4,
+      "avg_rating": 3.75,
+      "nss": 50.0
+    }
+  ],
+  "themes": [
+    {
+      "theme": "Playback reliability",
+      "volume": 4,
+      "nss": -50.0
+    },
+    {
+      "theme": "Subscription clarity",
+      "volume": 3,
+      "nss": -33.3
+    },
+    {
+      "theme": "Content discovery",
+      "volume": 2,
+      "nss": 100.0
+    },
+    {
+      "theme": "Navigation",
+      "volume": 2,
+      "nss": -50.0
+    },
+    {
+      "theme": "Offline access",
+      "volume": 2,
+      "nss": 100.0
+    }
+  ]
+}
