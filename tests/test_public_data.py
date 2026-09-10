@@ -6,6 +6,7 @@ def test_committed_demo_snapshots_contain_only_anonymized_evidence():
     for path in Path("src/data").glob("*.json"):
         snapshot = json.loads(path.read_text(encoding="utf-8"))
         assert snapshot.get("demoData") == "public-analysis-anonymized", path
+        review_ids = {review.get("id") for review in snapshot.get("reviews", [])}
         for review in snapshot.get("reviews", []):
             assert str(review.get("id", "")).startswith("anonymized-"), path
             assert review.get("author") in {
@@ -18,6 +19,8 @@ def test_committed_demo_snapshots_contain_only_anonymized_evidence():
                 assert "Synthetic" not in str(phrase.get("text", "")), path
 
         for scope in snapshot.get("scopes", {}).values():
+            for theme in scope.get("themes", []):
+                assert set(theme.get("verbatimIds", [])) <= review_ids, (path, theme.get("theme"))
             for point in scope.get("painPoints", []):
                 assert "Synthetic" not in str(point.get("quote", "")), path
             for example in scope.get("untagged", {}).get("examples", []):

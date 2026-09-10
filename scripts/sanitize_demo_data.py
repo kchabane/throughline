@@ -39,11 +39,22 @@ def sanitize_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
         ingestion["mode"] = "redacted_demo"
         ingestion.pop("review_fingerprint", None)
 
+    id_map: dict[Any, str] = {}
     for index, review in enumerate(snapshot.get("reviews", []), start=1):
+        old_id = review.get("id")
+        new_id = f"anonymized-{index:03d}"
+        # Some historical snapshots use a one-based numeric review ID while
+        # others already contain anonymized IDs. Keep both addressable so
+        # every theme can be migrated without losing its evidence links.
+        id_map[index] = new_id
+        id_map[str(index)] = new_id
+        if old_id is not None:
+            id_map[old_id] = new_id
+            id_map[str(old_id)] = new_id
         themes = review.get("themes") or []
         theme = str(themes[0]) if themes else "overall product experience"
         replacement = paraphrased_text(theme, review.get("rating"))
-        review["id"] = f"anonymized-{index:03d}"
+        review["id"] = new_id
         review["author"] = reviewer_label(review.get("source"))
         review["text"] = replacement
         for phrase in review.get("phrases", []):
@@ -53,6 +64,13 @@ def sanitize_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
     for scope in snapshot.get("scopes", {}).values():
         if not isinstance(scope, dict):
             continue
+        for theme in scope.get("themes", []):
+            if not isinstance(theme, dict):
+                continue
+            theme["verbatimIds"] = [
+                id_map.get(review_id, id_map.get(str(review_id), review_id))
+                for review_id in theme.get("verbatimIds", [])
+            ]
         for point in scope.get("painPoints", []):
             if isinstance(point, dict):
                 point["quote"] = paraphrased_text(str(point.get("tag") or "product experience"), point.get("rating", 1))
