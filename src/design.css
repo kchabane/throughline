@@ -73,11 +73,8 @@ button:disabled { cursor: wait; }
 .tl-search-reference-try button { min-height: 40px; background: white; border-color: var(--tl-border); color: var(--tl-secondary); animation: none; opacity: 1; }
 .tl-search-reference-try button:hover { border-color: var(--tl-navy); background: var(--tl-blue); }
 .tl-search-reference-trust { color: var(--tl-muted); text-align: center; line-height: 1.5; }
-.tl-ref-hub { box-shadow: 0 8px 24px #072d590c; }
-.tl-ref-hub::before, .tl-ref-hub::after, .tl-ref-halo { display: none; }
 .tl-ref-hub-mark b { border-color: var(--tl-pink); }
 .tl-ref-output, .tl-ref-output-pulse { stroke: var(--tl-pink); }
-.tl-ref-incoming-motion .rm, .tl-ref-output-pulse { animation: none; opacity: .35; }
 .tl-reference-copy em { color: var(--tl-navy); }
 .tl-reference-loader { background: var(--tl-canvas); }
 .tl-reference-trust, .tl-reference-timing { color: var(--tl-muted); }

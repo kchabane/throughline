@@ -31,7 +31,7 @@ These are interface interpretation thresholds, not external performance benchmar
 - Evidence advances only when the reader chooses it.
 - Compare uses the original floating right-edge tab. Its dialog supports Escape, focus containment and focus restoration.
 - Theme rows become stacked items on narrow screens, preserving the same evidence controls.
-- Reduced-motion preferences disable ornamental transitions.
+- The signature Throughline animation retains traveling input signals, the output pulse and hub halos. Reduced-motion preferences disable motion.
 
 ## Theme section
 
