@@ -165,3 +165,46 @@ button:disabled { cursor: wait; }
 .tl-evidence-intro p { margin-top: 10px; color: var(--tl-secondary); font-size: 13px; line-height: 1.7; max-width: 690px; }
 .tl-theme-instruction { flex-basis: 100%; color: var(--tl-muted); font-size: 12px; line-height: 1.6; }
 .tl-theme-filters { flex-basis: 100%; margin-left: 0; }
+
+/* Original signature, with clearer foreground motion and a restrained response. */
+.tl-search-reference .tl-ref-signal.is-compact { opacity: 1; }
+.tl-ref-incoming-base .rp { stroke: #b4c7d6; opacity: .52; }
+.tl-ref-incoming-base .rp:nth-child(3n+1) { stroke: #e5a4b2; opacity: .5; }
+.tl-ref-incoming-motion .rm { stroke-width: 1.85; animation-name: tl-original-highlight; }
+.tl-ref-incoming-motion .rm:nth-child(2n) { stroke: #427291; }
+.tl-ref-incoming-motion .rm:nth-child(3n) { stroke: var(--tl-pink); }
+.tl-ref-converge .rc { stroke-width: 1.05; }
+.tl-ref-output { stroke-width: 1.55; }
+.tl-ref-output-pulse { stroke-width: 3; animation-name: tl-original-output-highlight; }
+.tl-ref-hub { background: #fff; border: 1px solid #ffffff; box-shadow: 0 14px 32px #072d591a,0 3px 7px #072d5909; animation: tl-original-response 4.9s ease-in-out infinite; }
+.tl-ref-hub-mark b { animation: tl-original-ring-response 4.9s ease-in-out infinite; }
+@keyframes tl-original-highlight {
+  0% { stroke-dashoffset: 0; opacity: 0; }
+  8% { opacity: .4; }
+  34% { opacity: .95; }
+  70% { opacity: .4; }
+  100% { stroke-dashoffset: -462; opacity: 0; }
+}
+@keyframes tl-original-output-highlight {
+  0% { stroke-dashoffset: 0; opacity: 0; }
+  18% { opacity: .95; }
+  58% { opacity: .6; }
+  100% { stroke-dashoffset: -670; opacity: 0; }
+}
+@keyframes tl-original-response {
+  0%,7%,44%,100% { transform: translate(-50%,-50%) scale(1); }
+  18% { transform: translate(-50%,-50%) scale(1.045); }
+  31% { transform: translate(-50%,-50%) scale(1.008); }
+}
+@keyframes tl-original-ring-response {
+  0%,7%,44%,100% { transform: scale(1); }
+  18% { transform: scale(1.12); }
+  31% { transform: scale(1.025); }
+}
+@media (max-width: 767px) {
+  .tl-ref-incoming-motion .rm { stroke-width: 1.5; }
+  .tl-ref-output-pulse { stroke-width: 2.4; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tl-ref-hub, .tl-ref-hub-mark b { animation: none; }
+}

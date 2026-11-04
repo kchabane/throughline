@@ -1,28 +1,29 @@
-# Signature animation restoration QA
+# Original animation refinement QA
 
-- Source visual truth: ../previews/design-review-original-motion.png
-- Implementation screenshot: ../previews/throughline-original-restored-motion.png
-- Comparison evidence: ../previews/original-restoration-comparison.png (source above implementation, inspected together).
-- Full-view implementation: ../previews/throughline-original-restored.png
-- Viewport: 1280 × 900 CSS pixels. Both focused captures: 1280 × 240 pixels, crop x=0, y=100. No density normalization. Different animation phases are expected.
+- Source visual truth: ../previews/throughline-original-restored-motion.png
+- Implementation: ../previews/throughline-original-refined.png
+- Combined comparison: ../previews/original-refinement-comparison.png (source above refinement, inspected together).
+- Viewport: 1280 × 900 CSS px; matched 1280 × 240 px motif crops at x=0,y=100. No density normalization. Animation phases differ.
 - State: entry screen, no company selected.
 
 ## Findings
 
-No actionable P0/P1/P2 differences within the animation scope. Original source paths, 12 input tracks, convergence geometry, output path, traveling-signal timing and hub halos are restored from the original component. Browser inspection confirms the original output animation is active.
+No actionable P0/P1/P2 mismatches against the selected original structure and requested refinement. The original paths, 12 input tracks, convergence and output shape remain unchanged. Moving highlights are intentionally crisper and higher contrast; the logo adds a restrained 4.5% scale response at the outgoing highlight's peak.
 
-- Fonts/typography: the animation contains no text; page typography is outside this restoration and remains as previously approved.
-- Spacing/layout: source motif geometry and hub placement match in the combined focused comparison. Current responsive container sizing is intentionally preserved.
-- Colors/tokens: approved blue/navy/pink colors intentionally replace the original warm colors.
-- Asset fidelity: original source component restored directly; experimental drifting strands, orbit, glow packets and exaggerated pumping removed.
-- Copy/content: no product copy changed.
+## Required surfaces
+
+- Typography: no text in the focused decorative region; page typography unchanged.
+- Spacing/layout: original motif geometry and hub anchor retained. Current approved responsive container sizing retained.
+- Colors/tokens: approved navy/pink palette retained; highlight weight and opacity intentionally increased.
+- Assets: original component reused directly, no replacement illustration or invented paths.
+- Copy/content: unchanged.
+
+## Checks and limits
+
+Production build and whitespace checks passed. Browser inspection confirmed original input duration (5.8 seconds) and new highlight/response animations. No browser console errors. At 375px, the document fits the viewport and the lighter mobile stroke rules apply. Existing reduced-motion rules remain in place; OS preference switching was not tested. Static screenshots cannot establish subjective motion quality or full accessibility compliance. No production publication occurred.
 
 ## Comparison history
 
-First restoration comparison: passed. No visual fixes were needed after comparison. Trailing whitespace cleanup was nonvisual.
-
-## Verification and limits
-
-Production build passed. Original animation names and paths checked in the rendered browser. This is a scoped decorative-animation restoration, not a full dashboard or accessibility audit. Motion phases cannot be judged from static screenshots alone. Production deployment has not changed.
+First refinement comparison passed with no actionable visual fixes required.
 
 final result: passed
