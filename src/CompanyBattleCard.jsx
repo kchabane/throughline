@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { AlertTriangle, ArrowLeft, Check, ChevronRight, Download, Info, RefreshCw, Search, ShieldCheck, Sparkles, TrendingUp, X } from "lucide-react";
+import { createPortal } from "react-dom";
 import battleCardNarratives from "./battle_card_narratives.json";
 
 /*
@@ -175,7 +176,7 @@ function CompareGlyph({ className = "" }) {
     <svg viewBox="0 0 38 38" className={className} aria-hidden="true">
       <path d="M3 10.5C10 10.5 11 18.9 18.2 19c7.2.1 8.4 8.5 16.8 8.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
       <path d="M3 27.5c7 0 8-8.4 15.2-8.5C25.4 18.9 26.6 10.5 35 10.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" opacity=".5" />
-      <circle cx="18.8" cy="19" r="3.4" fill="#F0714E" stroke="#FFFDFC" strokeWidth="1.5" />
+      <circle cx="18.8" cy="19" r="3.4" fill="#072D59" stroke="#FFFFFF" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -203,34 +204,34 @@ function HelpPopover({ type, open, setOpen }) {
         type="button"
         onClick={() => setOpen(open ? null : type)}
         className={isScore
-          ? "inline-flex h-7 w-7 items-center justify-center rounded-full text-[#8A7F79] transition hover:bg-[#F3EEEB] hover:text-[#172033] focus:outline-none focus:ring-2 focus:ring-[#F0714E]/25"
-          : "font-medium text-[#4B403C] underline decoration-[#BFAFA6] underline-offset-4 transition hover:text-[#172033] focus:outline-none focus:ring-2 focus:ring-[#F0714E]/20"}
+          ? "inline-flex h-7 w-7 items-center justify-center rounded-full text-[#60758B] transition hover:bg-[#F3EEEB] hover:text-[#072D59] focus:outline-none focus:ring-2 focus:ring-[#072D59]/25"
+          : "font-medium text-[#38516B] underline decoration-[#BFAFA6] underline-offset-4 transition hover:text-[#072D59] focus:outline-none focus:ring-2 focus:ring-[#072D59]/20"}
         aria-label={label}
         aria-expanded={open}
       >
         {isScore ? <Info size={15} strokeWidth={2} /> : "Methodology"}
       </button>
       {open && (
-        <div className={`absolute z-30 w-[340px] rounded-lg border border-[#D2C7C1] bg-[#FFFDFC] p-4 shadow-[0_14px_30px_rgba(23,32,51,0.12)] ${isScore ? "left-0 top-9" : "bottom-7 left-0"}`} role="dialog" aria-label={label}>
+        <div className={`absolute z-30 w-[340px] rounded-lg border border-[#D5E1EB] bg-[#FFFFFF] p-4 shadow-[0_14px_30px_rgba(7,45,89,0.12)] ${isScore ? "left-0 top-9" : "bottom-7 left-0"}`} role="dialog" aria-label={label}>
           <div className="flex items-start justify-between gap-3">
-            <div className="text-sm font-semibold text-[#172033]">{isScore ? "How Experience Score works" : "How this comparison is built"}</div>
-            <button type="button" onClick={() => setOpen(null)} aria-label="Close" className="rounded p-1 text-[#8A7F79] hover:bg-[#F3EEEB] hover:text-[#172033]"><X size={14} /></button>
+            <div className="text-sm font-semibold text-[#072D59]">{isScore ? "How Experience Score works" : "How this comparison is built"}</div>
+            <button type="button" onClick={() => setOpen(null)} aria-label="Close" className="rounded p-1 text-[#60758B] hover:bg-[#F3EEEB] hover:text-[#072D59]"><X size={14} /></button>
           </div>
           {isScore ? (
             <>
-              <p className="mt-2 text-[13px] leading-5 text-[#4B403C]">A normalized 0–100 measure based on sentiment within reviews mapped to this experience dimension.</p>
+              <p className="mt-2 text-[13px] leading-5 text-[#38516B]">A normalized 0–100 measure based on sentiment within reviews mapped to this experience dimension.</p>
               <div className="mt-3 grid grid-cols-3 gap-2 border-y border-[#E7DFDB] py-3 text-center">
-                <div><div className="font-semibold text-[#172033]">0–49</div><div className="text-[11px] text-[#8A7F79]">Negative</div></div>
-                <div><div className="font-semibold text-[#172033]">50</div><div className="text-[11px] text-[#8A7F79]">Neutral</div></div>
-                <div><div className="font-semibold text-[#172033]">51–100</div><div className="text-[11px] text-[#8A7F79]">Positive</div></div>
+                <div><div className="font-semibold text-[#072D59]">0–49</div><div className="text-[11px] text-[#60758B]">Negative</div></div>
+                <div><div className="font-semibold text-[#072D59]">50</div><div className="text-[11px] text-[#60758B]">Neutral</div></div>
+                <div><div className="font-semibold text-[#072D59]">51–100</div><div className="text-[11px] text-[#60758B]">Positive</div></div>
               </div>
-              <p className="mt-3 text-[12px] leading-5 text-[#8A7F79]">Review volume is shown separately as Evidence and never increases the score.</p>
+              <p className="mt-3 text-[12px] leading-5 text-[#60758B]">Review volume is shown separately as Evidence and never increases the score.</p>
             </>
           ) : (
-            <div className="mt-2 space-y-2 text-[12px] leading-5 text-[#4B403C]">
+            <div className="mt-2 space-y-2 text-[12px] leading-5 text-[#38516B]">
               <p>Reviews are mapped into the same standardized dimensions for both companies so the comparison remains apples-to-apples.</p>
               <p>Experience Score reflects sentiment quality only. Evidence volume and confidence are shown separately and do not inflate the score.</p>
-              <p className="text-[#8A7F79]">If matched evidence is insufficient for either company, Throughline leaves the score unavailable rather than estimating it.</p>
+              <p className="text-[#60758B]">If matched evidence is insufficient for either company, Throughline leaves the score unavailable rather than estimating it.</p>
             </div>
           )}
         </div>
@@ -241,7 +242,7 @@ function HelpPopover({ type, open, setOpen }) {
 
 function Dumbbell({ a, b, aName, bName }) {
   if (a == null || b == null) {
-    return <div className="flex h-11 items-center text-xs text-[#8A7F79]">Not enough matched evidence</div>;
+    return <div className="flex h-11 items-center text-xs text-[#60758B]">Not enough matched evidence</div>;
   }
   const left = Math.min(a, b);
   const right = Math.max(a, b);
@@ -249,14 +250,14 @@ function Dumbbell({ a, b, aName, bName }) {
   const aTop = closeScores ? 9 : 13;
   const bTop = closeScores ? 18 : 13;
   return (
-    <div className="relative h-11 min-w-[220px]" aria-label={`${aName} Experience Score ${a} out of 100, ${bName} Experience Score ${b} out of 100`}>
+    <div className="tl-comparison-chart relative h-11 min-w-[110px]" aria-label={`${aName} Experience Score ${a} out of 100, ${bName} Experience Score ${b} out of 100`}>
       <div className="absolute left-0 right-0 top-[21px] h-px bg-[#D9D0CB]" />
-      <div className="absolute top-[19px] h-[5px] rounded-full bg-[#E4C1B4]" style={{ left: `${left}%`, width: `${Math.max(2, right - left)}%` }} />
+      <div className="absolute top-[19px] h-[5px] rounded-full bg-[#DBF2FC]" style={{ left: `${left}%`, width: `${Math.max(2, right - left)}%` }} />
       <div className="absolute -translate-x-1/2" style={{ left: `${a}%`, top: `${aTop}px` }}>
-        <span className="block h-[17px] w-[17px] rounded-full border-[3px] border-[#FFFDFC] bg-[#172033] shadow-[0_1px_3px_rgba(23,32,51,.22)]" />
+        <span className="block h-[17px] w-[17px] rounded-full border-[3px] border-[#FFFFFF] bg-[#FD6E88] shadow-[0_1px_3px_rgba(7,45,89,.22)]" />
       </div>
       <div className="absolute -translate-x-1/2" style={{ left: `${b}%`, top: `${bTop}px` }}>
-        <span className="block h-[17px] w-[17px] rounded-full border-[3px] border-[#FFFDFC] bg-[#F0714E] shadow-[0_1px_3px_rgba(240,113,78,.25)]" />
+        <span className="block h-[17px] w-[17px] rounded-full border-[3px] border-[#FFFFFF] bg-[#072D59] shadow-[0_1px_3px_rgba(7,45,89,.25)]" />
       </div>
     </div>
   );
@@ -267,7 +268,7 @@ function EvidenceBadge({ confidence }) {
     high: "border-[#C6D9D0] bg-[#F1F7F4] text-[#365D4C]",
     moderate: "border-[#DED1B8] bg-[#FBF7ED] text-[#7B6237]",
     limited: "border-[#E3C6BB] bg-[#FCF2EE] text-[#8A4C38]",
-    none: "border-[#DED6D1] bg-[#F8F5F3] text-[#8A7F79]",
+    none: "border-[#D5E1EB] bg-[#F8F5F3] text-[#60758B]",
   };
   return <span className={`inline-flex rounded-md border px-1.5 py-0.5 text-[10px] font-medium ${styles[confidence.tone]}`}>{confidence.label}</span>;
 }
@@ -276,29 +277,29 @@ function DimensionEvidence({ row, aName, bName, onBack }) {
   const side = (label, d, accent) => (
     <div className="border-t border-[#E6DEDA] pt-3 first:border-0 first:pt-0">
       <div className="flex items-center justify-between gap-3">
-        <div className="text-[13px] font-semibold text-[#172033]">{label}</div>
-        <div className="tabular-nums" style={{ color: accent }}><span className="text-lg font-semibold">{d.score ?? "—"}</span>{d.score != null && <span className="ml-0.5 text-[10px] font-medium text-[#8A7F79]">/100</span>}</div>
+        <div className="text-[13px] font-semibold text-[#072D59]">{label}</div>
+        <div className="tabular-nums" style={{ color: accent }}><span className="text-lg font-semibold">{d.score ?? "—"}</span>{d.score != null && <span className="ml-0.5 text-[10px] font-medium text-[#60758B]">/100</span>}</div>
       </div>
-      <div className="mt-1 flex items-center gap-2 text-[11px] text-[#8A7F79]">
-        <span><span className="font-medium text-[#4B403C]">Evidence:</span> {d.evidence} mentions</span><span>·</span><EvidenceBadge confidence={d.confidence} />
+      <div className="mt-1 flex items-center gap-2 text-[11px] text-[#60758B]">
+        <span><span className="font-medium text-[#38516B]">Evidence:</span> {d.evidence} mentions</span><span>·</span><EvidenceBadge confidence={d.confidence} />
       </div>
       {d.themes.length ? (
         <div className="mt-2 space-y-1">
-          {d.themes.slice(0, 3).map((t) => <div key={t.theme} className="text-[12px] leading-4 text-[#4B403C]">{t.theme}</div>)}
+          {d.themes.slice(0, 3).map((t) => <div key={t.theme} className="text-[12px] leading-4 text-[#38516B]">{t.theme}</div>)}
         </div>
-      ) : <div className="mt-2 text-xs text-[#8A7F79]">No matched theme evidence.</div>}
+      ) : <div className="mt-2 text-xs text-[#60758B]">No matched theme evidence.</div>}
     </div>
   );
 
   return (
-    <div className="rounded-xl border border-[#D8CEC8] bg-[#FFFDFC] p-5">
-      <button type="button" onClick={onBack} className="mb-4 inline-flex items-center gap-1 text-xs font-medium text-[#8A7F79] hover:text-[#172033]"><ArrowLeft size={13} /> Back to summary</button>
-      <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#8A7F79]">Evidence behind this dimension</div>
-      <h3 className="mt-1 text-lg font-semibold text-[#172033]">{row.label}</h3>
-      <p className="mt-1 text-xs leading-5 text-[#8A7F79]">Scores use only reviews mapped to this standardized dimension.</p>
+    <div className="rounded-xl border border-[#D8CEC8] bg-[#FFFFFF] p-5">
+      <button type="button" onClick={onBack} className="mb-4 inline-flex items-center gap-1 text-xs font-medium text-[#60758B] hover:text-[#072D59]"><ArrowLeft size={13} /> Back to summary</button>
+      <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#60758B]">Evidence behind this dimension</div>
+      <h3 className="mt-1 text-lg font-semibold text-[#072D59]">{row.label}</h3>
+      <p className="mt-1 text-xs leading-5 text-[#60758B]">Scores use only reviews mapped to this standardized dimension.</p>
       <div className="mt-4 space-y-4">
-        {side(aName, row.a, "#172033")}
-        {side(bName, row.b, "#F0714E")}
+        {side(aName, row.a, "#072D59")}
+        {side(bName, row.b, "#072D59")}
       </div>
     </div>
   );
@@ -330,18 +331,18 @@ function ExportExecutiveSummary({ rows, signals, aName, bName, takeaway }) {
   const items = buildExecutiveDifferences(rows, signals, aName, bName);
   return (
     <section className="battle-export-only border-b border-[#D8CEC8] px-8 py-6">
-      <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8A7F79]">Executive summary · Main differences</div>
+      <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#60758B]">Executive summary · Main differences</div>
       <div className="mt-3 grid grid-cols-2 gap-3">
         {items.map((item, idx) => (
           <div key={`${item.label}-${idx}`} className={`rounded-lg border px-4 py-3 ${item.tone === "positive" ? "border-[#C7DAD0] bg-[#F2F8F5]" : item.tone === "negative" ? "border-[#E5C3BA] bg-[#FCF1EE]" : "border-[#E2D6BD] bg-[#FBF7EE]"}`}>
             <div className={`text-[10px] font-semibold uppercase tracking-[0.08em] ${item.tone === "positive" ? "text-[#3F6D59]" : item.tone === "negative" ? "text-[#A44734]" : "text-[#81683B]"}`}>{item.label}</div>
-            <div className="mt-1 text-[12px] leading-5 text-[#172033]">{item.text}</div>
+            <div className="mt-1 text-[12px] leading-5 text-[#072D59]">{item.text}</div>
           </div>
         ))}
       </div>
       <div className="mt-4 rounded-lg border border-[#D9C6BD] bg-[#FBF3EF] px-4 py-3">
-        <div className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#8A7F79]">Throughline interpretation</div>
-        <p className="mt-1 text-[12px] leading-5 text-[#4B403C]">{takeaway}</p>
+        <div className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#60758B]">Throughline interpretation</div>
+        <p className="mt-1 text-[12px] leading-5 text-[#38516B]">{takeaway}</p>
       </div>
     </section>
   );
@@ -391,20 +392,20 @@ function BattleCardResult({ activeData, comparisonData, activeSlug, comparisonSl
 
   return (
     <>
-      <div className="flex items-start justify-between gap-6 border-b border-[#DED6D1] px-8 py-6">
+      <div className="tl-comparison-header flex items-start justify-between gap-6 border-b border-[#D5E1EB] px-8 py-6">
         <div className="min-w-0">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.13em] text-[#8A7F79]">Company Battle Card</div>
-          <h2 className="mt-1 text-[28px] font-semibold tracking-[-0.03em] text-[#172033]">{aName} <span className="font-normal text-[#8A7F79]">↔</span> {bName}</h2>
-          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-[#8A7F79]">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.13em] text-[#60758B]">Company Battle Card</div>
+          <h2 className="mt-1 text-[28px] font-semibold tracking-[-0.03em] text-[#072D59]">{aName} <span className="font-normal text-[#60758B]">↔</span> {bName}</h2>
+          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-[#60758B]">
             <div className="battle-lens-switch battle-print-hide" role="group" aria-label="Comparison lens"><button type="button" className={lens === "ux" ? "is-active" : ""} onClick={() => onLensChange("ux")}>UX / Product</button><button type="button" className={lens === "cx" ? "is-active" : ""} onClick={() => onLensChange("cx")}>CX</button></div><span>All matched sources</span><span>·</span><span>Standardized dimensions</span>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button type="button" onClick={exportBattleCardPDF} className="battle-print-hide inline-flex items-center gap-1.5 rounded-lg border border-[#D7CDC7] bg-[#FFFDFC] px-3 py-2 text-xs font-semibold text-[#4B403C] transition hover:border-[#BFAFA6] hover:bg-[#F8F4F2] hover:text-[#172033]">
+          <button type="button" onClick={exportBattleCardPDF} className="battle-print-hide inline-flex items-center gap-1.5 rounded-lg border border-[#D7CDC7] bg-[#FFFFFF] px-3 py-2 text-xs font-semibold text-[#38516B] transition hover:border-[#BFAFA6] hover:bg-[#EDF4F9] hover:text-[#072D59]">
             <Download size={14} /> Export PDF
           </button>
-          <button type="button" onClick={onChange} className="battle-print-hide rounded-lg border border-[#D7CDC7] bg-white px-3 py-2 text-xs font-semibold text-[#4B403C] transition hover:bg-[#F8F4F2]">Change comparison</button>
-          <button type="button" onClick={onClose} aria-label="Close battle card" className="battle-print-hide rounded-lg p-2 text-[#8A7F79] transition hover:bg-[#F3EEEB] hover:text-[#172033]"><X size={19} /></button>
+          <button type="button" onClick={onChange} className="battle-print-hide rounded-lg border border-[#D7CDC7] bg-white px-3 py-2 text-xs font-semibold text-[#38516B] transition hover:bg-[#EDF4F9]">Change comparison</button>
+          <button type="button" onClick={onClose} aria-label="Close battle card" className="battle-print-hide rounded-lg p-2 text-[#60758B] transition hover:bg-[#F3EEEB] hover:text-[#072D59]"><X size={19} /></button>
         </div>
       </div>
 
@@ -413,21 +414,21 @@ function BattleCardResult({ activeData, comparisonData, activeSlug, comparisonSl
       <div className="grid gap-6 px-7 py-6 lg:grid-cols-[minmax(0,1fr)_270px]">
         <div className="min-w-0">
           <div className="mb-1 flex items-center gap-1.5">
-            <h3 className="text-sm font-semibold text-[#172033]">Experience comparison</h3>
+            <h3 className="text-sm font-semibold text-[#072D59]">Experience comparison</h3>
             <HelpPopover type="score" open={openHelp === "score"} setOpen={setOpenHelp} />
           </div>
-          <p className="mb-5 max-w-2xl text-[13px] leading-5 text-[#4B403C]"><span className="font-semibold text-[#172033]">Experience Score (0–100)</span> shows how positively the dimension is discussed. <span className="font-semibold text-[#172033]">Evidence mentions</span> show how many review mentions support the score.</p>
+          <p className="mb-5 max-w-2xl text-[13px] leading-5 text-[#38516B]"><span className="font-semibold text-[#072D59]">Experience Score (0–100)</span> shows how positively the dimension is discussed. <span className="font-semibold text-[#072D59]">Evidence mentions</span> show how many review mentions support the score.</p>
 
-          <div className="grid grid-cols-[minmax(170px,1fr)_minmax(230px,1.35fr)_84px_84px] items-end gap-4 border-b border-[#D8CEC8] pb-2 text-[11px] font-semibold text-[#8A7F79]">
+          <div className="tl-comparison-head grid grid-cols-[minmax(140px,1fr)_minmax(120px,1fr)_52px_52px] items-end gap-4 border-b border-[#D8CEC8] pb-2 text-[11px] font-semibold text-[#60758B]">
             <div>Dimension</div>
             <div>Experience comparison</div>
             <div className="text-right">
-              <div className="text-[#172033]">{aName}</div>
-              <div className="mt-0.5 text-[9px] font-medium uppercase tracking-[0.06em] text-[#8A7F79]">Score /100</div>
+              <div className="text-[#072D59]">{aName}</div>
+              <div className="mt-0.5 text-[9px] font-medium uppercase tracking-[0.06em] text-[#60758B]">Score /100</div>
             </div>
             <div className="text-right">
-              <div className="text-[#F0714E]">{bName}</div>
-              <div className="mt-0.5 text-[9px] font-medium uppercase tracking-[0.06em] text-[#8A7F79]">Score /100</div>
+              <div className="text-[#072D59]">{bName}</div>
+              <div className="mt-0.5 text-[9px] font-medium uppercase tracking-[0.06em] text-[#60758B]">Score /100</div>
             </div>
           </div>
 
@@ -439,36 +440,36 @@ function BattleCardResult({ activeData, comparisonData, activeSlug, comparisonSl
                   key={row.id}
                   type="button"
                   onClick={() => setSelectedRow(row)}
-                  className="group relative grid w-full grid-cols-[minmax(170px,1fr)_minmax(230px,1.35fr)_84px_84px] items-center gap-4 py-4 text-left transition hover:bg-[#FBF7F5] focus:bg-[#FBF7F5] focus:outline-none"
+                  className="tl-comparison-row group relative grid w-full grid-cols-[minmax(140px,1fr)_minmax(120px,1fr)_52px_52px] items-center gap-4 py-4 text-left transition hover:bg-[#FBF7F5] focus:bg-[#FBF7F5] focus:outline-none"
                 >
                   <div className="min-w-0 pr-2">
-                    <div className="text-[13px] font-semibold leading-5 text-[#172033]">{row.label}</div>
-                    <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] text-[#8A7F79]">
-                      <span><span className="font-medium text-[#4B403C]">Evidence mentions:</span> {aName} {row.a.evidence} · {bName} {row.b.evidence}</span>
+                    <div className="text-[13px] font-semibold leading-5 text-[#072D59]">{row.label}</div>
+                    <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] text-[#60758B]">
+                      <span><span className="font-medium text-[#38516B]">Evidence mentions:</span> {aName} {row.a.evidence} · {bName} {row.b.evidence}</span>
                       {delta != null && delta >= 10 && <span className="font-medium text-[#A94F36]">· {gapLabel(row)}</span>}
                     </div>
                   </div>
                   <Dumbbell a={row.a.score} b={row.b.score} aName={aName} bName={bName} />
-                  <div className="text-right tabular-nums text-[#172033]">
-                    <span className="text-base font-semibold">{row.a.score ?? "—"}</span>{row.a.score != null && <span className="ml-0.5 text-[10px] font-medium text-[#8A7F79]">/100</span>}
+                  <div data-company={aName} className="tl-comparison-score text-right tabular-nums text-[#072D59]">
+                    <span className="text-base font-semibold">{row.a.score ?? "—"}</span>{row.a.score != null && <span className="ml-0.5 text-[10px] font-medium text-[#60758B]">/100</span>}
                   </div>
-                  <div className="text-right tabular-nums text-[#F0714E]">
-                    <span className="text-base font-semibold">{row.b.score ?? "—"}</span>{row.b.score != null && <span className="ml-0.5 text-[10px] font-medium text-[#8A7F79]">/100</span>}
+                  <div data-company={bName} className="tl-comparison-score text-right tabular-nums text-[#072D59]">
+                    <span className="text-base font-semibold">{row.b.score ?? "—"}</span>{row.b.score != null && <span className="ml-0.5 text-[10px] font-medium text-[#60758B]">/100</span>}
                   </div>
-                  <div className="pointer-events-none absolute right-3 top-2 z-10 translate-y-1 rounded-lg border border-[#D8CEC8] bg-[#FFFDFC] px-3 py-2 text-[10px] leading-4 text-[#4B403C] opacity-0 shadow-[0_10px_25px_rgba(23,32,51,.10)] transition group-hover:translate-y-0 group-hover:opacity-100 group-focus:translate-y-0 group-focus:opacity-100">
-                    <div className="font-semibold text-[#172033]">{gapLabel(row)}</div>
+                  <div className="tl-comparison-hover pointer-events-none absolute right-3 top-2 z-10 translate-y-1 rounded-lg border border-[#D8CEC8] bg-[#FFFFFF] px-3 py-2 text-[10px] leading-4 text-[#38516B] opacity-0 shadow-[0_10px_25px_rgba(7,45,89,.10)] transition group-hover:translate-y-0 group-hover:opacity-100 group-focus:translate-y-0 group-focus:opacity-100">
+                    <div className="font-semibold text-[#072D59]">{gapLabel(row)}</div>
                     <div>{aName}: score {row.a.score ?? "—"}/100 · {row.a.evidence} evidence mentions · {row.a.confidence.label}</div>
                     <div>{bName}: score {row.b.score ?? "—"}/100 · {row.b.evidence} evidence mentions · {row.b.confidence.label}</div>
-                    <div className="mt-1 text-[#8A7F79]">Click for evidence</div>
+                    <div className="mt-1 text-[#60758B]">Click for evidence</div>
                   </div>
                 </button>
               );
             })}
           </div>
 
-          <div className="mt-5 flex flex-wrap items-center gap-5 border-t border-[#D8CEC8] pt-4 text-[11px] text-[#8A7F79]">
-            <div className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-[#172033]" /> {aName}</div>
-            <div className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-[#F0714E]" /> {bName}</div>
+          <div className="mt-5 flex flex-wrap items-center gap-5 border-t border-[#D8CEC8] pt-4 text-[11px] text-[#60758B]">
+            <div className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-[#FD6E88]" /> {aName}</div>
+            <div className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-[#072D59]" /> {bName}</div>
             <HelpPopover type="methodology" open={openHelp === "methodology"} setOpen={setOpenHelp} />
           </div>
         </div>
@@ -478,25 +479,25 @@ function BattleCardResult({ activeData, comparisonData, activeSlug, comparisonSl
             <DimensionEvidence row={selectedRow} aName={aName} bName={bName} onBack={() => setSelectedRow(null)} />
           ) : (
             <>
-              <div className="rounded-xl border border-[#D8CEC8] bg-[#FFFDFC] p-5">
-                <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8A7F79]">Guided readout</div>
+              <div className="rounded-xl border border-[#D8CEC8] bg-[#FFFFFF] p-5">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#60758B]">Guided readout</div>
                 <div className="mt-4 space-y-3">
                   <div className="rounded-lg border border-[#E4C3B9] bg-[#FFF4F0] p-3.5">
                     <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#A44734]"><TrendingUp size={13} /> Relative advantage</div>
-                    <div className="mt-1.5 text-sm font-semibold leading-5 text-[#172033]">{signals.largest ? `${signals.largest.gap > 0 ? aName : bName} is stronger on ${signals.largest.label.toLowerCase()}` : "Not enough evidence"}</div>
-                    {signals.largest && <div className="mt-1 text-xs text-[#4B403C]">{Math.abs(signals.largest.gap)}-point advantage · {signals.largest.a.score} vs {signals.largest.b.score}</div>}
+                    <div className="mt-1.5 text-sm font-semibold leading-5 text-[#072D59]">{signals.largest ? `${signals.largest.gap > 0 ? aName : bName} is stronger on ${signals.largest.label.toLowerCase()}` : "Not enough evidence"}</div>
+                    {signals.largest && <div className="mt-1 text-xs text-[#38516B]">{Math.abs(signals.largest.gap)}-point advantage · {signals.largest.a.score} vs {signals.largest.b.score}</div>}
                   </div>
 
                   <div className="rounded-lg border border-[#C9D8D1] bg-[#F3F8F5] p-3.5">
                     <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#3F6D59]"><ShieldCheck size={13} /> Shared strength</div>
-                    <div className="mt-1.5 text-sm font-semibold leading-5 text-[#172033]">{signals.sharedStrength?.label || "No clear shared strength"}</div>
-                    {signals.sharedStrength && <div className="mt-1 text-xs text-[#4B403C]">Positive for both · scores {signals.sharedStrength.a.score} and {signals.sharedStrength.b.score}</div>}
+                    <div className="mt-1.5 text-sm font-semibold leading-5 text-[#072D59]">{signals.sharedStrength?.label || "No clear shared strength"}</div>
+                    {signals.sharedStrength && <div className="mt-1 text-xs text-[#38516B]">Positive for both · scores {signals.sharedStrength.a.score} and {signals.sharedStrength.b.score}</div>}
                   </div>
 
-                  <div className={`rounded-lg border p-3.5 ${signals.sharedFriction ? "border-[#E7C1B8] bg-[#FCF1EE]" : "border-[#DED6D1] bg-[#FAF7F5]"}`}>
-                    <div className={`flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.08em] ${signals.sharedFriction ? "text-[#A44734]" : "text-[#8A7F79]"}`}><AlertTriangle size={13} /> Shared weakness</div>
-                    <div className="mt-1.5 text-sm font-semibold leading-5 text-[#172033]">{signals.sharedFriction?.label || "No material shared weakness"}</div>
-                    {signals.sharedFriction && <div className="mt-1 text-xs text-[#4B403C]">Negative for both · scores {signals.sharedFriction.a.score} and {signals.sharedFriction.b.score}</div>}
+                  <div className={`rounded-lg border p-3.5 ${signals.sharedFriction ? "border-[#E7C1B8] bg-[#FCF1EE]" : "border-[#D5E1EB] bg-[#F5F9FC]"}`}>
+                    <div className={`flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.08em] ${signals.sharedFriction ? "text-[#A44734]" : "text-[#60758B]"}`}><AlertTriangle size={13} /> Shared weakness</div>
+                    <div className="mt-1.5 text-sm font-semibold leading-5 text-[#072D59]">{signals.sharedFriction?.label || "No material shared weakness"}</div>
+                    {signals.sharedFriction && <div className="mt-1 text-xs text-[#38516B]">Negative for both · scores {signals.sharedFriction.a.score} and {signals.sharedFriction.b.score}</div>}
                   </div>
                 </div>
               </div>
@@ -504,12 +505,12 @@ function BattleCardResult({ activeData, comparisonData, activeSlug, comparisonSl
               <div className="relative overflow-hidden rounded-xl border border-[#D9C6BD] bg-[#FBF3EF] p-5">
                 <img src="/throughline-motif-findings.png" alt="" aria-hidden="true" className="pointer-events-none absolute -bottom-12 -right-10 w-36 opacity-[0.045]" />
                 <div className="relative">
-                  <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8A7F79]">
-                    <Sparkles size={13} className="text-[#F0714E]" /> Throughline interpretation
+                  <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#60758B]">
+                    <Sparkles size={13} className="text-[#072D59]" /> Throughline interpretation
                     {isAISummary && <span className="normal-case tracking-normal font-medium text-[#A35A44]">AI-generated</span>}
                   </div>
-                  <p className="mt-2 text-[13px] leading-[1.6] text-[#4B403C]">{takeaway}</p>
-                  {!isAISummary && <div className="mt-3 text-[10px] text-[#8A7F79]">Interpretive fallback · Anthropic narrative not generated yet.</div>}
+                  <p className="mt-2 text-[13px] leading-[1.6] text-[#38516B]">{takeaway}</p>
+                  {!isAISummary && <div className="mt-3 text-[10px] text-[#60758B]">Summary derived from the matched evidence.</div>}
                 </div>
               </div>
             </>
@@ -529,19 +530,19 @@ function Setup({ activeData, alternatives, lens, setLens, comparisonSlug, setCom
   const sharedPeriod = selectedData ? comparisonEvidencePeriod(activeData, selectedData) : null;
   return (
     <>
-      <div className="flex items-start justify-between border-b border-[#DED6D1] px-8 py-6">
+      <div className="flex items-start justify-between border-b border-[#D5E1EB] px-8 py-6">
         <div>
-          <div className="text-[11px] font-semibold uppercase tracking-[0.13em] text-[#8A7F79]">Company Battle Card</div>
-          <h2 className="mt-1 text-[26px] font-semibold tracking-[-0.025em] text-[#172033]">Compare {activeData?.company}</h2>
-          <p className="mt-1 text-sm text-[#4B403C]">Choose the lens and the company you want to understand alongside it.</p>
+          <div className="text-[11px] font-semibold uppercase tracking-[0.13em] text-[#60758B]">Company Battle Card</div>
+          <h2 className="mt-1 text-[26px] font-semibold tracking-[-0.025em] text-[#072D59]">Compare {activeData?.company}</h2>
+          <p className="mt-1 text-sm text-[#38516B]">Choose the lens and the company you want to understand alongside it.</p>
         </div>
-        <button type="button" onClick={onClose} aria-label="Close comparison" className="rounded-lg p-2 text-[#8A7F79] transition hover:bg-[#F3EEEB] hover:text-[#172033]"><X size={19} /></button>
+        <button type="button" onClick={onClose} aria-label="Close comparison" className="rounded-lg p-2 text-[#60758B] transition hover:bg-[#F3EEEB] hover:text-[#072D59]"><X size={19} /></button>
       </div>
 
       <div className="px-8 py-7">
         <div>
-          <div className="mb-3 flex items-center gap-2"><span className="grid h-5 w-5 place-items-center rounded-full bg-[#172033] text-[10px] font-bold text-white">1</span><span className="text-xs font-semibold text-[#172033]">Choose comparison lens</span></div>
-          <div className="grid grid-cols-2 overflow-hidden rounded-xl border border-[#D7CDC7] bg-[#F8F4F2] p-1">
+          <div className="mb-3 flex items-center gap-2"><span className="grid h-5 w-5 place-items-center rounded-full bg-[#072D59] text-[10px] font-bold text-white">1</span><span className="text-xs font-semibold text-[#072D59]">Choose comparison lens</span></div>
+          <div className="grid grid-cols-2 overflow-hidden rounded-xl border border-[#D7CDC7] bg-[#EDF4F9] p-1">
             {[
               ["ux", "UX / Product", "Usability, reliability, onboarding and core product experience"],
               ["cx", "CX", "Trust, service, value and overall customer experience"],
@@ -550,13 +551,13 @@ function Setup({ activeData, alternatives, lens, setLens, comparisonSlug, setCom
                 key={id}
                 type="button"
                 onClick={() => setLens(id)}
-                className={`rounded-lg px-4 py-3 text-left transition ${lens === id ? "border border-[#F0714E] bg-[#FFF7F3] shadow-[inset_3px_0_0_#F0714E,0_1px_2px_rgba(23,32,51,.06)]" : "border border-transparent hover:bg-white/50"}`}
+                className={`rounded-lg px-4 py-3 text-left transition ${lens === id ? "border border-[#072D59] bg-[#EEF6FC] shadow-[inset_3px_0_0_#072D59,0_1px_2px_rgba(7,45,89,.06)]" : "border border-transparent hover:bg-white/50"}`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <div className="text-sm font-semibold text-[#172033]">{label}</div>
-                  {lens === id && <span className="grid h-5 w-5 place-items-center rounded-full bg-[#F0714E] text-white"><Check size={12} strokeWidth={3} /></span>}
+                  <div className="text-sm font-semibold text-[#072D59]">{label}</div>
+                  {lens === id && <span className="grid h-5 w-5 place-items-center rounded-full bg-[#072D59] text-white"><Check size={12} strokeWidth={3} /></span>}
                 </div>
-                <div className="mt-1 text-[11px] leading-4 text-[#8A7F79]">{description}</div>
+                <div className="mt-1 text-[11px] leading-4 text-[#60758B]">{description}</div>
               </button>
             ))}
           </div>
@@ -564,47 +565,47 @@ function Setup({ activeData, alternatives, lens, setLens, comparisonSlug, setCom
 
         <div className="mt-7">
           <div className="mb-3 flex items-center justify-between">
-            <div className="flex items-center gap-2"><span className="grid h-5 w-5 place-items-center rounded-full bg-[#172033] text-[10px] font-bold text-white">2</span><span className="text-xs font-semibold text-[#172033]">Find a company</span></div>
-            <div className="text-[11px] text-[#8A7F79]">Current company is excluded</div>
+            <div className="flex items-center gap-2"><span className="grid h-5 w-5 place-items-center rounded-full bg-[#072D59] text-[10px] font-bold text-white">2</span><span className="text-xs font-semibold text-[#072D59]">Find a company</span></div>
+            <div className="text-[11px] text-[#60758B]">Current company is excluded</div>
           </div>
           <div className="relative">
-            <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A7F79]" />
-            <input value={query} onChange={(e) => setQuery(e.target.value)} disabled={analyzing} placeholder="Search App Store and Google Play" className="h-11 w-full rounded-xl border border-[#D8CEC8] bg-white pl-10 pr-4 text-sm text-[#172033] outline-none transition placeholder:text-[#A59B95] focus:border-[#8EA1B2] focus:ring-2 focus:ring-[#8EA1B2]/15" />
+            <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#60758B]" />
+            <input value={query} onChange={(e) => setQuery(e.target.value)} disabled={analyzing} placeholder="Search App Store and Google Play" className="h-11 w-full rounded-xl border border-[#D8CEC8] bg-white pl-10 pr-4 text-sm text-[#072D59] outline-none transition placeholder:text-[#A59B95] focus:border-[#8EA1B2] focus:ring-2 focus:ring-[#8EA1B2]/15" />
           </div>
-          <div className="mb-2 mt-4 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8A7F79]">{normalized ? "Matching analysed companies" : "Previously analysed"}</div>
+          <div className="mb-2 mt-4 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#60758B]">{normalized ? "Matching analysed companies" : "Previously analysed"}</div>
           <div className="grid gap-3 sm:grid-cols-2">
             {visibleAlternatives.slice(0, 6).map(([slug, data]) => (
               <button
                 key={slug}
                 type="button"
                 onClick={() => setComparisonSlug(slug)}
-                className={`group flex items-center justify-between rounded-xl border px-4 py-4 text-left transition ${comparisonSlug === slug ? "border-[#F0714E] bg-[#FFF7F3] shadow-[inset_3px_0_0_#F0714E]" : "border-[#D8CEC8] bg-[#FFFDFC] hover:border-[#BDAEA6] hover:bg-[#FCF9F7]"}`}
+                className={`group flex items-center justify-between rounded-xl border px-4 py-4 text-left transition ${comparisonSlug === slug ? "border-[#072D59] bg-[#EEF6FC] shadow-[inset_3px_0_0_#072D59]" : "border-[#D8CEC8] bg-[#FFFFFF] hover:border-[#BDAEA6] hover:bg-[#FCF9F7]"}`}
               >
                 <div>
-                  <div className="text-sm font-semibold text-[#172033]">{data.company}</div>
-                  <div className="mt-1 text-[11px] text-[#8A7F79]">{data?.scopes?.all?.kpis?.nReviews ?? "—"} reviews available</div>
+                  <div className="text-sm font-semibold text-[#072D59]">{data.company}</div>
+                  <div className="mt-1 text-[11px] text-[#60758B]">{data?.scopes?.all?.kpis?.nReviews ?? "—"} reviews available</div>
                 </div>
-                <div className={`grid h-8 w-8 place-items-center rounded-full border transition ${comparisonSlug === slug ? "border-[#F0714E] bg-[#F0714E] text-white" : "border-[#D8CEC8] bg-white text-[#8A7F79] group-hover:text-[#172033]"}`}>
+                <div className={`grid h-8 w-8 place-items-center rounded-full border transition ${comparisonSlug === slug ? "border-[#072D59] bg-[#072D59] text-white" : "border-[#D8CEC8] bg-white text-[#60758B] group-hover:text-[#072D59]"}`}>
                   {comparisonSlug === slug ? <Check size={15} strokeWidth={2.5} /> : <ChevronRight size={15} />}
                 </div>
               </button>
             ))}
           </div>
-          {!visibleAlternatives.length && normalized && !analyzing && <div className="mt-3 flex items-center justify-between gap-4 rounded-xl border border-[#D8CEC8] bg-[#FAF8F6] px-4 py-3.5"><div><div className="text-sm font-semibold text-[#172033]">{query.trim()}</div><div className="mt-0.5 text-[11px] text-[#8A7F79]">{publicDemo ? "Not included in this cached portfolio demonstration" : "No comparison data available yet"}</div></div>{publicDemo ? <span className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#8A7F79]">Live analysis kept private</span> : <button type="button" onClick={onAnalyze} className="inline-flex items-center gap-2 rounded-lg bg-[#172033] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#26334A]"><Search size={13} />Analyse for comparison</button>}</div>}
-          {analyzing && <div className="mt-3 rounded-xl border border-[#BAC7D3] bg-[#F5F8FA] px-4 py-3.5" role="status" aria-live="polite"><div className="flex items-center gap-3"><span className="battle-analysis-mark" aria-hidden="true"><i /></span><div className="min-w-0"><div className="text-xs font-semibold text-[#172033]">Preparing {query.trim()} for comparison</div><div className="mt-0.5 truncate text-[11px] text-[#637184]">{analysisMessage || "Collecting public reviews and matching experience dimensions…"}</div></div><span className="ml-auto text-[10px] font-semibold text-[#637184]">~2 min</span></div></div>}
+          {!visibleAlternatives.length && normalized && !analyzing && <div className="mt-3 flex items-center justify-between gap-4 rounded-xl border border-[#D8CEC8] bg-[#FAF8F6] px-4 py-3.5"><div><div className="text-sm font-semibold text-[#072D59]">{query.trim()}</div><div className="mt-0.5 text-[11px] text-[#60758B]">{publicDemo ? "Not included in this cached portfolio demonstration" : "No comparison data available yet"}</div></div>{publicDemo ? <span className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#60758B]">Live analysis kept private</span> : <button type="button" onClick={onAnalyze} className="inline-flex items-center gap-2 rounded-lg bg-[#072D59] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#26334A]"><Search size={13} />Analyse for comparison</button>}</div>}
+          {analyzing && <div className="mt-3 rounded-xl border border-[#BAC7D3] bg-[#F5F8FA] px-4 py-3.5" role="status" aria-live="polite"><div className="flex items-center gap-3"><span className="battle-analysis-mark" aria-hidden="true"><i /></span><div className="min-w-0"><div className="text-xs font-semibold text-[#072D59]">Preparing {query.trim()} for comparison</div><div className="mt-0.5 truncate text-[11px] text-[#637184]">{analysisMessage || "Collecting public reviews and matching experience dimensions…"}</div></div><span className="ml-auto text-[10px] font-semibold text-[#637184]">~2 min</span></div></div>}
           {analysisState === "error" && <div className="mt-3 flex items-center justify-between rounded-xl border border-[#E5C3BA] bg-[#FCF2EE] px-4 py-3 text-xs text-[#8A4C38]"><span>{analysisMessage || "The comparison analysis did not complete."}</span><button type="button" onClick={onAnalyze} className="font-semibold underline underline-offset-2">Try again</button></div>}
-          {exactMatch && normalized && <button type="button" onClick={() => setComparisonSlug(exactMatch[0])} className="mt-3 text-xs font-semibold text-[#A14A42]">Use analysed {exactMatch[1].company}</button>}
-          {selectedData && <div className="mt-4 flex items-center gap-3 border-t border-[#E7DFDB] pt-3 text-[11px]"><span className="font-semibold uppercase tracking-[0.08em] text-[#8A7F79]">Shared evidence period</span><span className="font-medium text-[#4B403C]">{sharedPeriod || "Period unavailable"}</span><span className="text-[#B5AAA4]">·</span><span className="text-[#8A7F79]">All matched sources</span></div>}
+          {exactMatch && normalized && <button type="button" onClick={() => setComparisonSlug(exactMatch[0])} className="mt-3 text-xs font-semibold text-[#072D59]">Use analysed {exactMatch[1].company}</button>}
+          {selectedData && <div className="mt-4 flex items-center gap-3 border-t border-[#E7DFDB] pt-3 text-[11px]"><span className="font-semibold uppercase tracking-[0.08em] text-[#60758B]">Shared evidence period</span><span className="font-medium text-[#38516B]">{sharedPeriod || "Period unavailable"}</span><span className="text-[#B5AAA4]">·</span><span className="text-[#60758B]">All matched sources</span></div>}
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-5 border-t border-[#DED6D1] bg-[#FAF7F5] px-8 py-4">
-        <p className="max-w-lg text-[11px] leading-4 text-[#8A7F79]">The battle card compares standardized dimensions so unlike products can still be understood through the same experience lens.</p>
+      <div className="flex items-center justify-between gap-5 border-t border-[#D5E1EB] bg-[#F5F9FC] px-8 py-4">
+        <p className="max-w-lg text-[11px] leading-4 text-[#60758B]">The battle card compares standardized dimensions so unlike products can still be understood through the same experience lens.</p>
         <button
           type="button"
           disabled={!comparisonSlug}
           onClick={onBuild}
-          className="inline-flex items-center gap-2 rounded-lg bg-[#F0714E] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#D95F3E] disabled:cursor-not-allowed disabled:bg-[#C8C0BC] disabled:opacity-100"
+          className="inline-flex items-center gap-2 rounded-lg bg-[#072D59] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#123F70] disabled:cursor-not-allowed disabled:bg-[#C8C0BC] disabled:opacity-100"
         >
           Build {lens === "cx" ? "CX" : "UX"} comparison <ChevronRight size={15} />
         </button>
@@ -615,6 +616,7 @@ function Setup({ activeData, alternatives, lens, setLens, comparisonSlug, setCom
 
 export default function CompanyBattleCard({ activeSlug, companies, onCompanyReady, publicDemo = false }) {
   const [open, setOpen] = useState(false);
+  const dialogRef = useRef(null);
   const [lens, setLens] = useState("ux");
   const [comparisonSlug, setComparisonSlug] = useState("");
   const [showResult, setShowResult] = useState(false);
@@ -622,6 +624,32 @@ export default function CompanyBattleCard({ activeSlug, companies, onCompanyRead
   const [analysisState, setAnalysisState] = useState("idle");
   const [analysisMessage, setAnalysisMessage] = useState("");
   const [analysisJobId, setAnalysisJobId] = useState(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const previousFocus = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    dialogRef.current?.querySelector("button")?.focus();
+    const onKey = (event) => {
+      if (event.key === "Escape") { setOpen(false); return; }
+      if (event.key !== "Tab") return;
+      const nodes = [...(dialogRef.current?.querySelectorAll('button:not(:disabled), input, select, a[href], [tabindex="0"]') || [])].filter(node => node.getClientRects().length);
+      const first = nodes[0], last = nodes[nodes.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKey);
+      previousFocus?.focus();
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (open) dialogRef.current?.querySelector("button")?.focus();
+  }, [showResult]);
 
   const activeData = companies[activeSlug];
   const alternatives = Object.entries(companies).filter(([slug]) => slug !== activeSlug);
@@ -700,20 +728,15 @@ export default function CompanyBattleCard({ activeSlug, companies, onCompanyRead
       <button
         type="button"
         onClick={openSetup}
-        className="compare-intercept group fixed right-0 top-[42%] z-40 h-[124px] w-[54px] translate-x-[1px] overflow-hidden rounded-l-2xl border border-r-0 border-[#D2C7C1] bg-[#FFFDFC]/97 text-[#172033] shadow-[-8px_10px_28px_rgba(23,32,51,0.10)] backdrop-blur-sm transition-[width,box-shadow,border-color] duration-300 hover:w-[176px] hover:border-[#C3B5AD] hover:shadow-[-12px_14px_34px_rgba(23,32,51,0.14)] focus:w-[176px] focus:border-[#F0714E]/55 focus:outline-none focus:ring-2 focus:ring-[#F0714E]/25"
+        className="tl-compare-button"
         aria-label="Compare companies — open Company Battle Card"
       >
-        <span className="compare-intercept-glyph absolute left-[13px] top-[18px] block shrink-0"><CompareGlyph className="h-7 w-7 text-[#172033] transition-transform duration-300 group-hover:scale-110 group-focus:scale-110" /><span className="compare-intercept-spark" aria-hidden="true" /></span>
-        <span className="compare-intercept-idle absolute left-1/2 top-[76px] -translate-x-1/2 -rotate-90 whitespace-nowrap text-[11px] font-semibold tracking-[0.08em] transition-opacity duration-150 group-hover:opacity-0 group-focus:opacity-0">Compare</span>
-        <span className="compare-intercept-labels pointer-events-none absolute left-[57px] top-[42px] min-w-[106px] translate-x-2 opacity-0 transition-all duration-250 group-hover:translate-x-0 group-hover:opacity-100 group-focus:translate-x-0 group-focus:opacity-100">
-          <span className="block text-[15px] font-semibold leading-5 text-[#172033]">Compare</span>
-          <span className="mt-0.5 block whitespace-nowrap text-[10px] leading-4 text-[#8A7F79]">Company battle card</span>
-        </span>
+        <CompareGlyph className="h-4 w-4" /><span>Compare</span>
       </button>
 
-      {open && (
-        <div className="battle-card-overlay fixed inset-0 z-[90] grid place-items-center bg-[#172033]/42 p-5 backdrop-blur-[2px]" onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
-          <section role="dialog" aria-modal="true" aria-label="Company Battle Card" className="battle-card-dialog max-h-[calc(100vh-64px)] w-full max-w-[1020px] overflow-y-auto overflow-x-hidden rounded-[18px] border border-[#CFC4BE] bg-[#FFFDFC] shadow-[0_34px_110px_rgba(10,18,32,.34)]">
+      {open && createPortal(
+        <div className="battle-card-overlay fixed inset-0 z-[90] grid place-items-center bg-[#072D59]/42 p-5 backdrop-blur-[2px]" onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
+          <section ref={dialogRef} tabIndex={-1} role="dialog" aria-modal="true" aria-label="Company Battle Card" className="battle-card-dialog max-h-[calc(100vh-64px)] w-full max-w-[1020px] overflow-y-auto overflow-x-hidden rounded-[18px] border border-[#CFC4BE] bg-[#FFFFFF] shadow-[0_34px_110px_rgba(10,18,32,.34)]">
             {showResult && comparisonData ? (
               <BattleCardResult activeData={activeData} comparisonData={comparisonData} activeSlug={activeSlug} comparisonSlug={comparisonSlug} lens={lens} onLensChange={setLens} onChange={() => setShowResult(false)} onClose={close} />
             ) : (
@@ -735,7 +758,7 @@ export default function CompanyBattleCard({ activeSlug, companies, onCompanyRead
               />
             )}
           </section>
-        </div>
+        </div>, document.body
       )}
     </>
   );

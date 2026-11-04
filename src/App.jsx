@@ -135,7 +135,7 @@ const VALENCE_LABEL = { pos: "Positive", neu: "Neutral", neg: "Negative" };
 // Reserved for section labels and column headers across the app — sans,
 // not mono. Monospace is kept ONLY for actual statistical notation
 // (H=, p<, rho=, n=, confidence intervals) and the CLI snippet.
-const EYEBROW = "font-sans text-xs font-semibold uppercase tracking-wider text-[#8A7F79]";
+const EYEBROW = "font-sans text-xs font-semibold uppercase tracking-wider text-[#60758B]";
 const VALENCE_BAR = { pos: "bg-emerald-500", neu: "bg-amber-500", neg: "bg-red-500" };
 const VALENCE_TEXT = { pos: "text-emerald-600", neu: "text-amber-600", neg: "text-red-600" };
 const VALENCE_RING = { pos: "bg-emerald-50", neu: "bg-amber-50", neg: "bg-red-50" };
@@ -167,9 +167,9 @@ function platformInsight(platform) {
 
 // Three-level text hierarchy — used to avoid washed-out grey on meaningful
 // content (findings, rationales, evidence, chart labels).
-const INK = "#172033";   // primary — anything the user must read to get a conclusion
-const INK2 = "#4B403C";  // secondary — supporting/explanatory content, chart values
-const INK3 = "#8A7F79";  // muted — timestamps, inactive controls, tertiary meta only
+const INK = "#072D59";   // primary — anything the user must read to get a conclusion
+const INK2 = "#38516B";  // secondary — supporting/explanatory content, chart values
+const INK3 = "#60758B";  // muted — timestamps, inactive controls, tertiary meta only
 
 /* Single source of truth for the rating↔sentiment classification, shared by
    the trust card and the detailed scatter so their counts are identical by
@@ -226,7 +226,7 @@ const KPI_TONE = {
   good: "text-emerald-700",
   mixed: "text-amber-600",
   bad: "text-red-600",
-  neutral: "text-[#172033]",
+  neutral: "text-[#072D59]",
 };
 const ratingTone = (avg) => (avg == null ? "neutral" : avg >= 4.0 ? "good" : avg >= 3.3 ? "mixed" : "bad");
 const nssTone = (nss) => (nss == null ? "neutral" : nss > 10 ? "good" : nss < -10 ? "bad" : "mixed");
@@ -243,9 +243,9 @@ const correlationTone = (r) => {
 const PRIORITY_STYLE = {
   "Fix first": "border-red-700 bg-red-600 text-white",
   "Investigate": "border-red-200 bg-red-50 text-red-700",
-  "Monitor": "border-slate-200 bg-slate-100 text-[#4B403C]",
+  "Monitor": "border-slate-200 bg-slate-100 text-[#38516B]",
   "Protect": "border-emerald-200 bg-emerald-50 text-emerald-700",
-  "Low evidence": "border-slate-200 bg-slate-50 text-[#8A7F79]",
+  "Low evidence": "border-slate-200 bg-slate-50 text-[#60758B]",
 };
 
 const STOP = new Set(["and", "with", "the", "of", "a", "in", "for", "to", "on"]);
@@ -273,7 +273,7 @@ function relativeDate(iso) {
 
 /* Throughline brand coral, sampled from the logo motif — used sparingly for
    the active nav mark and primary CTAs, never as chart data color. */
-const CORAL = "#F0714E";
+const CORAL = "#072D59";
 
 /* Subtle cropped brand motif for the storytelling cards (What we found, What to
    do next, Customer Voice, trust). Kept faint (~5%) and pushed to a corner so
@@ -287,8 +287,8 @@ const CardMotif = ({ variant, className = "" }) => (
 /* `surface` lets a card carry a subtle semantic tint (What we found, evidence,
    trust, Customer Voice); default is white. Border is a restrained warm gray so
    the layout reads as structured panels rather than floating on shadow. */
-const Card = ({ accent, surface, className = "", children }) => (
-  <div className={`rounded-xl border border-[#C2B6AF] ${surface || "bg-[#FFFDFC]"} ${
+const Card = ({ accent, surface, className = "", children, title }) => (
+  <div title={title} className={`rounded-xl border border-[#D5E1EB] ${surface || "bg-[#FFFFFF]"} ${
     accent === "neg" ? "border-t-4 border-t-red-500"
       : accent === "pos" ? "border-t-4 border-t-emerald-500" : ""} ${className}`}>
     {children}
@@ -309,11 +309,11 @@ function SourceMark({ source, className = "h-4 w-4" }) {
    (a snapshot), so this reflects scope rather than filtering it. */
 function DatePicker({ range, current = 30, onSelect, readOnly = false }) {
   const [open, setOpen] = useState(false);
-  if (readOnly) return <div className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-[#4B403C]"><CalendarDays size={15} strokeWidth={2} className="text-[#8A7F79]" />{range}</div>;
+  if (readOnly) return <div className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-[#38516B]"><CalendarDays size={15} strokeWidth={2} className="text-[#60758B]" />{range}</div>;
   return (
-    <div className="relative"><button onClick={() => setOpen(!open)} aria-expanded={open} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-[#4B403C] transition hover:border-[#C9BCB5] hover:bg-slate-50">
-      <CalendarDays size={15} strokeWidth={2} className="text-[#8A7F79]" />{range}<ChevronDown size={14} strokeWidth={2} className={`text-[#8A7F79] transition ${open ? "rotate-180" : ""}`} />
-    </button>{open && <div className="absolute left-0 top-11 z-50 w-48 rounded-lg border border-[#D8CEC8] bg-white p-1.5 shadow-xl">{[30,60,90].map((days)=><button key={days} onClick={() => { setOpen(false); if(days!==current) onSelect?.(days); }} className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm ${days===current ? "bg-[#FFF1EC] font-semibold text-[#A6533E]" : "text-[#4B403C] hover:bg-[#F7F4F2]"}`}><span>Last {days} days</span>{days===current && <Check size={14}/>}</button>)}</div>}</div>
+    <div className="relative"><button onClick={() => setOpen(!open)} aria-expanded={open} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-[#38516B] transition hover:border-[#C9BCB5] hover:bg-slate-50">
+      <CalendarDays size={15} strokeWidth={2} className="text-[#60758B]" />{range}<ChevronDown size={14} strokeWidth={2} className={`text-[#60758B] transition ${open ? "rotate-180" : ""}`} />
+    </button>{open && <div className="absolute left-0 top-11 z-50 w-48 rounded-lg border border-[#D8CEC8] bg-white p-1.5 shadow-xl">{[30,60,90].map((days)=><button key={days} onClick={() => { setOpen(false); if(days!==current) onSelect?.(days); }} className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm ${days===current ? "bg-[#FFF1EC] font-semibold text-[#072D59]" : "text-[#38516B] hover:bg-[#F7F4F2]"}`}><span>Last {days} days</span>{days===current && <Check size={14}/>}</button>)}</div>}</div>
   );
 }
 
@@ -322,15 +322,15 @@ function DatePicker({ range, current = 30, onSelect, readOnly = false }) {
 function SourceSelector({ store, setStore }) {
   const { DATA } = useAppData();
   return (
-    <div className="inline-flex rounded-lg border border-slate-200 bg-white p-1">
+    <div className="tl-source-selector inline-flex rounded-lg border border-slate-200 bg-white p-1">
       {DATA.sources.map((s) => (
-        <button key={s.id} onClick={() => setStore(s.id)}
+        <button key={s.id} aria-pressed={store === s.id} onClick={() => setStore(s.id)}
           className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition ${
-            store === s.id ? "bg-slate-100 font-semibold text-[#172033]"
-              : "font-medium text-[#8A7F79] hover:text-[#172033]"}`}>
+            store === s.id ? "bg-slate-100 font-semibold text-[#072D59]"
+              : "font-medium text-[#60758B] hover:text-[#072D59]"}`}>
           {s.id !== "all" && <SourceMark source={s.id} className="h-4 w-4" />}
           {s.label}
-          <span className={`rounded-full px-1.5 py-0.5 text-[10px] tabular-nums ${store===s.id ? "bg-white text-[#4B403C]" : "bg-[#F3EFEC] text-[#8A7F79]"}`}>{DATA.scopes?.[s.id]?.kpis?.nReviews ?? 0}</span>
+          <span className={`rounded-full px-1.5 py-0.5 text-[10px] tabular-nums ${store===s.id ? "bg-white text-[#38516B]" : "bg-[#EDF4F9] text-[#60758B]"}`}>{DATA.scopes?.[s.id]?.kpis?.nReviews ?? 0}</span>
         </button>
       ))}
     </div>
@@ -357,36 +357,36 @@ function CompanySwitcher({ compact = false }) {
     <div className="relative">
       <button onClick={() => setOpen((o) => !o)} aria-expanded={open}
         className="group -mx-1 flex items-center gap-1.5 rounded-lg px-1 transition hover:bg-black/[0.03]">
-        <h1 className={`${compact ? "text-[15px] font-semibold" : "text-[30px] font-bold"} leading-none tracking-tight text-[#172033]`}>
+        <h1 className={`${compact ? "text-[15px] font-semibold" : "text-[30px] font-bold"} leading-none tracking-tight text-[#072D59]`}>
           {DATA.company}
         </h1>
         <ChevronDown size={18} strokeWidth={2}
-          className={`mt-1 shrink-0 text-[#8A7F79] transition group-hover:text-[#4B403C] ${open ? "rotate-180" : ""}`} />
+          className={`mt-1 shrink-0 text-[#60758B] transition group-hover:text-[#38516B] ${open ? "rotate-180" : ""}`} />
       </button>
 
       {open && (
         <>
           <div className="fixed inset-0 z-20" onClick={() => { setOpen(false); setQuery(""); }} />
-          <div className="absolute left-0 top-full z-30 mt-2 w-72 rounded-lg border border-[#D8D3CF] bg-white shadow-lg">
+          <div className="absolute left-0 top-full z-30 mt-2 w-72 rounded-lg border border-[#D5E1EB] bg-white shadow-lg">
             <div className="flex items-center gap-2 border-b border-slate-100 px-3 py-2.5">
-              <Search size={15} strokeWidth={2} className="shrink-0 text-[#8A7F79]" />
+              <Search size={15} strokeWidth={2} className="shrink-0 text-[#60758B]" />
               <input autoFocus value={query} onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search companies…"
-                className="w-full text-sm text-[#172033] placeholder:text-[#8A7F79] focus:outline-none" />
+                className="w-full text-sm text-[#072D59] placeholder:text-[#60758B] focus:outline-none" />
             </div>
             <ul className="max-h-64 overflow-y-auto py-1">
               {filtered.map(([slug, d]) => (
                 <li key={slug}>
                   <button onClick={() => { setActiveSlug(slug); setOpen(false); setQuery(""); }}
                     className={`flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-sm transition hover:bg-slate-50 ${
-                      slug === activeSlug ? "font-semibold text-[#172033]" : "text-[#4B403C]"}`}>
+                      slug === activeSlug ? "font-semibold text-[#072D59]" : "text-[#38516B]"}`}>
                     {d.company || slug}
-                    {slug === activeSlug && <Check size={14} strokeWidth={2} className="shrink-0 text-[#8A7F79]" />}
+                    {slug === activeSlug && <Check size={14} strokeWidth={2} className="shrink-0 text-[#60758B]" />}
                   </button>
                 </li>
               ))}
               {filtered.length === 0 && (
-                <li className="px-3 py-2.5 text-sm text-[#8A7F79]">No companies match “{query}”.</li>
+                <li className="px-3 py-2.5 text-sm text-[#60758B]">No companies match “{query}”.</li>
               )}
             </ul>
           </div>
@@ -420,7 +420,7 @@ function OutlineButton({ icon: Icon, children, onClick, active }) {
     <button onClick={onClick}
       className={`inline-flex items-center gap-2 rounded-lg border px-3.5 py-2 text-sm font-medium transition ${
         active ? "border-slate-900 bg-slate-900 text-white"
-          : "border-slate-200 bg-white text-[#4B403C] hover:bg-slate-50"}`}>
+          : "border-slate-200 bg-white text-[#38516B] hover:bg-slate-50"}`}>
       {Icon && <Icon size={15} strokeWidth={2} />}
       {children}
     </button>
@@ -430,7 +430,7 @@ function OutlineButton({ icon: Icon, children, onClick, active }) {
 function GhostIcon({ icon: Icon, dot, label, onClick }) {
   return (
     <button aria-label={label} onClick={onClick}
-      className="relative grid h-9 w-9 place-items-center rounded-lg text-[#8A7F79] transition hover:bg-slate-100 hover:text-[#172033]">
+      className="relative grid h-9 w-9 place-items-center rounded-lg text-[#60758B] transition hover:bg-slate-100 hover:text-[#072D59]">
       <Icon size={18} strokeWidth={2} />
       {dot && <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white" />}
     </button>
@@ -466,8 +466,8 @@ function InfoPopover({ label, children, attention = false }) {
   }, []);
   return (
     <span ref={root} className="relative inline-flex shrink-0">
-      <button type="button" aria-label={label} aria-expanded={open} onClick={() => setOpen((v) => !v)} className={`tl-info-trigger grid h-6 w-6 place-items-center rounded-full text-[#7F746E] transition hover:bg-black/[0.05] hover:text-[#172033] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8EA1B2] ${attention ? "tl-info-attention" : ""}`}><Info size={14} /></button>
-      {open && <span role="tooltip" className="absolute right-0 top-8 z-[100] w-[280px] rounded-lg border border-[#324057] bg-[#172033] px-3.5 py-3 text-left text-[11px] font-normal leading-relaxed text-white shadow-xl">{children}</span>}
+      <button type="button" aria-label={label} aria-expanded={open} onClick={() => setOpen((v) => !v)} className={`tl-info-trigger grid h-6 w-6 place-items-center rounded-full text-[#60758B] transition hover:bg-black/[0.05] hover:text-[#072D59] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8EA1B2] ${attention ? "tl-info-attention" : ""}`}><Info size={14} /></button>
+      {open && <span role="tooltip" className="absolute right-0 top-8 z-[100] w-[280px] rounded-lg border border-[#324057] bg-[#072D59] px-3.5 py-3 text-left text-[11px] font-normal leading-relaxed text-white shadow-xl">{children}</span>}
     </span>
   );
 }
@@ -477,7 +477,7 @@ function InfoPopover({ label, children, attention = false }) {
    column doesn't need a bar to read at a glance. */
 function ImpactBar({ value, ratedN }) {
   if (value === null || value === undefined) {
-    return <span className="font-sans text-sm font-medium tabular-nums text-[#8A7F79]">n/a</span>;
+    return <span className="font-sans text-sm font-medium tabular-nums text-[#60758B]">n/a</span>;
   }
   const neg = value < 0;
   return (
@@ -521,7 +521,7 @@ function DistributionBar({ dist }) {
 function SentimentGauge({ mean, ci, dist, nSentences }) {
   const total = dist ? dist.positive + dist.neutral + dist.negative : 0;
   if (!total) {
-    return <span className="font-sans text-xs font-medium tabular-nums text-[#8A7F79]">n/a</span>;
+    return <span className="font-sans text-xs font-medium tabular-nums text-[#60758B]">n/a</span>;
   }
   const pctNeg = Math.round((dist.negative / total) * 100);
   const pctPos = Math.round((dist.positive / total) * 100);
@@ -533,7 +533,7 @@ function SentimentGauge({ mean, ci, dist, nSentences }) {
       {nSentences != null && <div className="mt-1 text-slate-300">{nSentences} scored phrases in this topic.</div>}
     </>}>
       <div className="w-full" aria-label={`${pctPos}% positive, ${Math.round((dist.neutral / total) * 100)}% neutral, ${pctNeg}% negative`}>
-        <DistributionBar dist={dist} />
+        <DistributionBar dist={dist} /><span className="tl-sentiment-caption">{pctPos}% positive · {Math.round((dist.neutral / total) * 100)}% neutral · {pctNeg}% negative</span>
       </div>
     </HoverTip>
   );
@@ -545,8 +545,8 @@ const StatBadge = ({ label, value, tone = "slate" }) => (
   <span className={`inline-flex items-center gap-1.5 rounded-md border px-2 py-1 font-mono text-[11px] ${
     tone === "good" ? "border-emerald-200 bg-emerald-50 text-emerald-700"
       : tone === "warn" ? "border-amber-200 bg-amber-50 text-amber-700"
-      : "border-slate-200 bg-slate-50 text-[#4B403C]"}`}>
-    <span className={value != null ? "text-[#8A7F79]" : "font-semibold"}>{label}</span>
+      : "border-slate-200 bg-slate-50 text-[#38516B]"}`}>
+    <span className={value != null ? "text-[#60758B]" : "font-semibold"}>{label}</span>
     {value != null && <span className="font-semibold">{value}</span>}
   </span>
 );
@@ -581,8 +581,8 @@ function Sidebar({ view, setView }) {
             <button key={id} onClick={() => setView(id)}
               className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] transition ${
                 active ? "bg-white/[0.07] font-medium text-white"
-                  : "font-normal text-[#8A7F79] hover:bg-white/[0.04] hover:text-slate-200"}`}>
-              <Icon size={18} strokeWidth={1.75} className={active ? "text-[#F0714E]" : ""} />
+                  : "font-normal text-[#60758B] hover:bg-white/[0.04] hover:text-slate-200"}`}>
+              <Icon size={18} strokeWidth={1.75} className={active ? "text-[#072D59]" : ""} />
               {label}
             </button>
           );
@@ -596,9 +596,9 @@ function Sidebar({ view, setView }) {
           </div>
           <div className="min-w-0 flex-1 leading-tight">
             <div className="truncate text-sm font-semibold text-white">Executive User</div>
-            <div className="truncate text-[11px] text-[#8A7F79]">Klarna workspace</div>
+            <div className="truncate text-[11px] text-[#60758B]">Klarna workspace</div>
           </div>
-          <ChevronDown size={16} strokeWidth={1.75} className="shrink-0 text-[#8A7F79]" />
+          <ChevronDown size={16} strokeWidth={1.75} className="shrink-0 text-[#60758B]" />
         </button>
       </div>
     </aside>
@@ -609,35 +609,18 @@ function Sidebar({ view, setView }) {
    Header + filter bar
    ------------------------------------------------------------------ */
 
-function TopHeader({ query, setQuery }) {
+function TopHeader({ onHome }) {
+  const { activeSlug, companies, setRuntimeCompanies } = useAppData();
   return (
-    <header className="sticky top-0 z-[70] isolate border-b border-[#DED9D5]/85 bg-[#FFFDFC]/84 shadow-[0_1px_0_rgba(23,32,51,0.025)] backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-[#FFFDFC]/78">
-      <div className="flex items-center gap-5 px-8 py-3.5">
-        {/* Sidebar-free product identity. Kept intentionally compact: this is
-            application chrome, not a second marketing header. */}
-        <div className="flex shrink-0 items-center gap-2.5 pr-1">
-          <span className="relative block h-5 w-7" aria-hidden="true">
-            <span className="absolute left-0 top-[9px] h-[2px] w-7 rounded-full bg-[#172033]" />
-            <span className="absolute left-[9px] top-[4px] h-2.5 w-2.5 rounded-full border-2 border-[#F0714E] bg-white" />
-          </span>
-          <span className="text-[15px] font-semibold tracking-[-0.01em] text-[#172033]">Throughline</span>
-        </div>
-        <div className="h-6 w-px shrink-0 bg-slate-200" />
-        <CompanySwitcher compact />
-        <div className="h-6 w-px shrink-0 bg-slate-200" />
-
-        <div className="relative w-full max-w-md">
-          <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A7F79]" />
-          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search reviews..."
-            className="w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-[#172033] placeholder:text-[#8A7F79] focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/5" />
-        </div>
-        <button className="hidden items-center gap-2 text-sm font-medium text-[#4B403C] transition hover:text-[#172033] md:inline-flex">
-          <SlidersHorizontal size={16} strokeWidth={2} />Filters
+    <header className="tl-app-header">
+      <div className="tl-header-inner">
+        <button type="button" className="tl-brand" onClick={onHome} aria-label="Throughline — back to company selection">
+          <span className="tl-brand-mark" aria-hidden="true"><i /></span>Throughline
         </button>
-        <div className="ml-auto flex items-center gap-2.5">
-          <div className="h-6 w-px bg-slate-200" />
-          <GhostIcon icon={Bell} dot label="Notifications" />
-        </div>
+        <div className="tl-header-company"><CompanySwitcher compact /></div>
+        <span className="tl-demo-badge">Demo data</span>
+        <CompanyBattleCard publicDemo={PUBLIC_DEMO} activeSlug={activeSlug} companies={companies}
+          onCompanyReady={(slug, data) => setRuntimeCompanies((current) => ({ ...current, [slug]: data }))} />
       </div>
     </header>
   );
@@ -698,8 +681,8 @@ function ValidatedChips({ slice }) {
   );
   return (
     <HoverTip tip={tip}>
-      <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-[12px] leading-none text-[#8A7F79]">
-        <span className="font-medium text-[#8A7F79]">Validation:</span>
+      <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-[12px] leading-none text-[#60758B]">
+        <span className="font-medium text-[#60758B]">Validation:</span>
         <span>{parts.join(" · ")}</span>
         <Info size={12} strokeWidth={2} className="shrink-0 text-slate-300" />
       </span>
@@ -717,23 +700,23 @@ function LimitationsDrawer() {
     <div className="relative">
       <button onClick={() => setOpen(!open)} aria-expanded={open}
         className={`inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium transition ${
-          open ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-white text-[#4B403C] hover:text-[#172033]"}`}>
+          open ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-white text-[#38516B] hover:text-[#072D59]"}`}>
         <Info size={14} strokeWidth={2} />
         Methodology &amp; validation
         <ChevronDown size={13} strokeWidth={2.5} className={`transition ${open ? "rotate-180" : ""}`} />
       </button>
       {open && (
-        <Card className="absolute right-0 top-9 z-50 w-[360px] p-5 shadow-[0_18px_48px_rgba(23,32,51,.16)]">
-          <div className="text-sm font-bold text-[#172033]">Methodology &amp; validation</div>
-          <div className="mt-3 space-y-2 border-y border-[#EEE8E4] py-3 text-[12px] text-[#4B403C]">
-            <div className="flex items-center justify-between"><span>Theme differences</span><strong className={omnibus.testable ? "text-emerald-700" : "text-[#8A7F79]"}>{omnibus.testable ? "Significant" : "Not testable"}</strong></div>
-            <div className="flex items-center justify-between"><span>Rating alignment</span><strong className={validation.testable ? "text-emerald-700" : "text-[#8A7F79]"}>{validation.testable ? correlationStrength(validation.spearman_rho) : "Not testable"}</strong></div>
-            {validation.testable && <div className="font-mono text-[11px] text-[#8A7F79]">ρ {Number(validation.spearman_rho).toFixed(2)} · n={validation.n}</div>}
+        <Card className="absolute right-0 top-9 z-50 w-[360px] p-5 shadow-[0_18px_48px_rgba(7,45,89,.16)]">
+          <div className="text-sm font-bold text-[#072D59]">Methodology &amp; validation</div>
+          <div className="mt-3 space-y-2 border-y border-[#EEE8E4] py-3 text-[12px] text-[#38516B]">
+            <div className="flex items-center justify-between"><span>Theme differences</span><strong className={omnibus.testable ? "text-emerald-700" : "text-[#60758B]"}>{omnibus.testable ? "Significant" : "Not testable"}</strong></div>
+            <div className="flex items-center justify-between"><span>Rating alignment</span><strong className={validation.testable ? "text-emerald-700" : "text-[#60758B]"}>{validation.testable ? correlationStrength(validation.spearman_rho) : "Not testable"}</strong></div>
+            {validation.testable && <div className="font-mono text-[11px] text-[#60758B]">ρ {Number(validation.spearman_rho).toFixed(2)} · n={validation.n}</div>}
           </div>
-          <div className="mt-3 text-[11px] font-semibold uppercase tracking-wider text-[#8A7F79]">Limitations</div>
+          <div className="mt-3 text-[11px] font-semibold uppercase tracking-wider text-[#60758B]">Limitations</div>
           <ul className="space-y-2.5">
             {DATA.caveats.map((c) => (
-              <li key={c} className="flex gap-2.5 text-[13px] leading-relaxed text-[#4B403C]">
+              <li key={c} className="flex gap-2.5 text-[13px] leading-relaxed text-[#38516B]">
                 <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-slate-300" />{c}
               </li>
             ))}
@@ -747,41 +730,6 @@ function LimitationsDrawer() {
 /* Every card gets one line of context beneath the number — the brief line
    between "here is a figure" and "here is what the figure means" — without
    turning a KPI card into a chart of its own. */
-function AnimatedKpiValue({ value }) {
-  const [display, setDisplay] = useState(value);
-  const reduce = typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  useEffect(() => {
-    if (reduce || value === null || value === undefined) { setDisplay(value); return undefined; }
-    const raw = String(value);
-    const match = raw.match(/[−-]?\d+(?:\.\d+)?/);
-    if (!match) { setDisplay(value); return undefined; }
-    const token = match[0];
-    const target = Number(token.replace("−", "-"));
-    if (!Number.isFinite(target)) { setDisplay(value); return undefined; }
-    const decimals = (token.split(".")[1] || "").length;
-    const prefix = raw.slice(0, match.index);
-    const suffix = raw.slice((match.index || 0) + token.length);
-    const started = performance.now();
-    const duration = 720;
-    let raf = 0;
-    const render = (now) => {
-      const p = Math.min(1, (now - started) / duration);
-      const eased = 1 - Math.pow(1 - p, 3);
-      const current = target * eased;
-      const abs = Math.abs(current).toFixed(decimals);
-      const signed = current < 0 ? `−${abs}` : abs;
-      setDisplay(`${prefix}${signed}${suffix}`);
-      if (p < 1) raf = requestAnimationFrame(render);
-      else setDisplay(value);
-    };
-    raf = requestAnimationFrame(render);
-    return () => cancelAnimationFrame(raf);
-  }, [value, reduce]);
-
-  return <span className="tl-kpi-value-resolve">{display}</span>;
-}
-
 function KpiRow({ slice, store }) {
   const { DATA } = useAppData();
   const k = slice.kpis;
@@ -799,19 +747,19 @@ function KpiRow({ slice, store }) {
   const delta = (a, b, digits = 1) => a == null || b == null ? null : Number((Number(a) - Number(b)).toFixed(digits));
   const ratingDelta = delta(latest.avgRating, previous.avgRating, 2);
   const sentimentDelta = delta(latest.nss, previous.nss, 1);
-  const direction = (value, unit) => Number(latest.nReviews || 0) < 5 || Number(previous.nReviews || 0) < 5 ? "Directional only · sparse week" : value == null ? "No prior-week comparison" : `${value > 0 ? "↑" : value < 0 ? "↓" : "→"} ${Math.abs(value).toFixed(unit === "★" ? 2 : 1)}${unit} vs previous week`;
+  const direction = (value, unit) => Number(latest.nReviews || 0) < 5 || Number(previous.nReviews || 0) < 5 ? "Trend unavailable · sparse weeks" : value == null ? "No prior-week comparison" : `${value > 0 ? "↑" : value < 0 ? "↓" : "→"} ${Math.abs(value).toFixed(unit === "★" ? 2 : 1)}${unit} vs previous week`;
   const cards = [
     {
       label: "Avg star rating", icon: Star,
       value: k.avgRating === null ? "—" : k.avgRating.toFixed(2),
-      tone: ratingTone(k.avgRating),
-      note: direction(ratingDelta, "★"), tip: "Average published star rating for reviews in the selected evidence window.",
+      tone: k.nReviews < 5 ? "neutral" : ratingTone(k.avgRating),
+      note: k.nReviews < 5 ? "Insufficient evidence · fewer than 5 reviews" : direction(ratingDelta, "★"), tip: "Average published star rating. Green: 4 or above; amber: 3.3 to below 4; red: below 3.3. Fewer than 5 reviews stays neutral.",
     },
     {
       label: "Net sentiment", icon: Smile,
       value: k.nss === null ? "—" : fmt(k.nss, 1),
-      tone: nssTone(k.nss),
-      note: direction(sentimentDelta, " pts"), tip: "Net Sentiment Score: positive phrases minus negative phrases as a percentage of scored phrases.",
+      tone: k.nReviews < 5 ? "neutral" : nssTone(k.nss),
+      note: k.nReviews < 5 ? "Insufficient evidence · fewer than 5 reviews" : direction(sentimentDelta, " pts"), tip: "Positive phrase share minus negative phrase share. Green: above +10; amber: −10 to +10; red: below −10. Fewer than 5 reviews stays neutral.",
     },
     {
       label: "Total reviews", icon: MessageSquare,
@@ -824,9 +772,9 @@ function KpiRow({ slice, store }) {
       // are easy to conflate but answer different questions.
       // ArrowLeftRight mirrors the "↔" in the label and, unlike TrendingUp,
       // doesn't imply a time trend the data doesn't have.
-      label: "Analysis confidence", icon: ArrowLeftRight,
+      label: "Rating alignment", icon: ArrowLeftRight,
       value: k.agreement === null ? "Not testable" : correlationStrength(k.agreement),
-      tone: correlationTone(k.agreement),
+      tone: "neutral",
       note: k.agreement === null ? "Not testable at this sample size" : `ρ ${k.agreement} · n=${k.agreementN || k.nReviews}`,
       tip: "Spearman correlation between model sentiment and published star ratings.", confidence: true,
     },
@@ -839,8 +787,9 @@ function KpiRow({ slice, store }) {
             <span className={EYEBROW} style={{ color: INK2 }}>{label}</span>
             <Icon size={21} strokeWidth={1.8} style={{ color: INK3 }} />
           </div>
-          <div className={`mt-1.5 font-sans text-[26px] font-bold tracking-tight tabular-nums ${KPI_TONE[tone] || KPI_TONE.neutral}`}><AnimatedKpiValue value={value} /></div>
-          <div className="mt-1 flex min-h-7 items-end justify-between gap-2"><div className="tl-kpi-note rounded-full px-2 py-1 text-[11px] font-medium" style={{ color: INK2 }}>{note}</div>{confidence && <LimitationsDrawer />}</div>
+          <div className={`mt-1.5 font-sans text-[26px] font-bold tracking-tight tabular-nums ${KPI_TONE[tone] || KPI_TONE.neutral}`}>{value}</div>
+          {!confidence && tone !== "neutral" && <span className={`tl-status-label ${KPI_TONE[tone]}`}>{label === "Net sentiment" ? nssShort(k.nss) : ratingLabel(k.avgRating)}</span>}
+          <div className="mt-1 flex min-h-7 flex-wrap items-end justify-between gap-2"><div className="tl-kpi-note rounded-full px-2 py-1 text-[11px] font-medium" style={{ color: INK2 }}>{note}</div>{confidence && <LimitationsDrawer />}</div>
         </Card>
       ))}
     </div>
@@ -854,7 +803,7 @@ function KpiLoadingRow({ slice }) {
     { label: "Avg star rating", value: knownRating, note: "Published rating available" },
     { label: "Net sentiment", value: null, note: "Scoring customer phrases" },
     { label: "Total reviews", value: knownReviews, note: "Reviews collected" },
-    { label: "Analysis confidence", value: null, note: "Calculating alignment" },
+    { label: "Rating alignment", value: null, note: "Calculating alignment" },
   ];
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4" aria-label="Dashboard metrics are loading">
@@ -897,7 +846,7 @@ function WeeklyPulse({ weeks = [], activeWeek, onSelectWeek }) {
   const maxReviews = Math.max(1, ...weeks.map((w) => Number(w.nReviews) || 0));
   const baseConfig = {
     sentiment: { label: "Net sentiment", color: "#E85D4A", value: (w) => w.nss, floor: -100, ceiling: 100, format: (v) => fmt(v, 1) },
-    rating: { label: "Average rating", color: "#172033", value: (w) => w.avgRating, floor: 1, ceiling: 5, format: (v) => `${Number(v).toFixed(2)}★` },
+    rating: { label: "Average rating", color: "#072D59", value: (w) => w.avgRating, floor: 1, ceiling: 5, format: (v) => `${Number(v).toFixed(2)}★` },
     reviews: { label: "Review volume", color: "#5B7C91", value: (w) => w.nReviews, floor: 0, ceiling: maxReviews, format: (v) => `${v} reviews` },
   }[focus];
   const validWeeks = weeks.map((week, originalIndex) => ({ week, originalIndex, value: baseConfig.value(week) })).filter((row) => row.value != null);
@@ -939,7 +888,7 @@ function WeeklyPulse({ weeks = [], activeWeek, onSelectWeek }) {
   return (
     <Card className="overflow-hidden">
       <div className="border-b border-[#EEE9E5] px-5 py-4">
-        <div className="flex flex-wrap items-start justify-between gap-3"><div><h2 className="text-[14px] font-bold" style={{ color: INK }}>Weekly pulse</h2><span className="text-xs" style={{ color: INK3 }}>{sparse ? `${validWeeks.length === 1 ? "Only one week contains" : `Only ${validWeeks.length} weeks contain`} enough evidence. Treat this as an early directional signal.` : "Select a week to inspect what changed in themes and customer evidence."}</span></div>{sparse && <HoverTip tip="More weekly periods are needed before this movement can be treated as an established trend."><span className="rounded-full bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-700">Limited evidence · {validWeeks.length} week{validWeeks.length === 1 ? "" : "s"}</span></HoverTip>}</div>
+        <div className="flex flex-wrap items-start justify-between gap-3"><div><h2 className="text-[14px] font-bold" style={{ color: INK }}>Weekly pulse</h2><span className="text-xs" style={{ color: INK3 }}>{sparse ? `${validWeeks.length === 1 ? "Only one week has" : `Only ${validWeeks.length} weeks have`} review data. More evidence is needed to establish a trend.` : "Select a week to inspect what changed in themes and customer evidence."}</span></div>{sparse && <HoverTip tip="More weekly periods are needed before this movement can be treated as an established trend."><span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold text-slate-600">Limited evidence · {validWeeks.length} week{validWeeks.length === 1 ? "" : "s"}</span></HoverTip>}</div>
       </div>
       <div className="relative px-5 pb-3 pt-3">
         <div className="tl-chart-overlay">
@@ -949,7 +898,7 @@ function WeeklyPulse({ weeks = [], activeWeek, onSelectWeek }) {
         <svg viewBox={`0 0 ${width} ${chartHeight}`} className="mt-12 block h-auto w-full overflow-hidden" role="img" aria-label={`${config.label} across weekly periods`}>
           <defs><linearGradient id={`weekly-area-${focus}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={config.color} stopOpacity=".16"/><stop offset="1" stopColor={config.color} stopOpacity="0"/></linearGradient></defs>
           {[top, (top+bottom)/2, bottom].map((gy) => <line key={gy} x1={left} x2={right} y1={gy} y2={gy} stroke="#E8E1DD" />)}
-          <text x="16" y="19" fill="#8A7F79" fontSize="10" fontWeight="600">{config.label}</text>
+          <text x="16" y="19" fill="#60758B" fontSize="10" fontWeight="600">{config.label}</text>
           {focus === "sentiment" && domainMin <= 0 && domainMax >= 0 && <><line x1={left} x2={right} y1={y(0)} y2={y(0)} stroke="#CFC5BF" strokeDasharray="4 5"/><text x="45" y={y(0)+4} fill="#9A8F89" fontSize="9">0</text></>}
           {points.map((p, i) => {
             const contextualHeight = Math.max(6, (Number(p.week.nReviews || 0) / maxReviews) * 78);
@@ -963,21 +912,21 @@ function WeeklyPulse({ weeks = [], activeWeek, onSelectWeek }) {
           {focus !== "reviews" && validWeeks.length > 1 && linePath && <path key={focus} d={linePath} fill="none" stroke={config.color} strokeWidth={sparse ? "3.5" : "3"} strokeLinecap="round" strokeLinejoin="round" className="tl-week-rating-line" />}
           {points.map((p) => <g key={`${focus}-${p.week.start}`} className="cursor-pointer" onMouseEnter={() => setHoveredWeek(p.originalIndex)} onMouseLeave={() => setHoveredWeek(null)} onFocus={() => setHoveredWeek(p.originalIndex)} onBlur={() => setHoveredWeek(null)} onClick={() => onSelectWeek?.(activeWeek === p.originalIndex ? null : p.originalIndex)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelectWeek?.(activeWeek === p.originalIndex ? null : p.originalIndex); } }} role="button" tabIndex="0" aria-label={`${p.week.label}: ${p.week.nReviews} reviews, ${p.week.avgRating ?? "no rating"} stars, net sentiment ${p.week.nss ?? "unavailable"}`}>
             <rect x={p.x-Math.max(100,barWidth/2)} y="18" width={Math.max(200,barWidth)} height="344" fill="transparent" />
-            {focus !== "reviews" && <circle cx={p.x} cy={p.y} r={active === p.originalIndex ? 7 : 5.5} fill="#FFFDFC" stroke={config.color} strokeWidth={active === p.originalIndex ? 3 : 2} className="tl-week-point" />}
-            <text x={p.x} y={Math.max(25,p.y-14)} textAnchor="middle" fill="#172033" fontSize="12" fontWeight="750">{config.format(p.value)}</text>
-            <text x={p.x} y="363" textAnchor="middle" fill={active === p.originalIndex ? "#172033" : "#7F746E"} fontSize="13" fontWeight={active === p.originalIndex ? "700" : "600"}>{p.week.label}</text>
+            {focus !== "reviews" && <circle cx={p.x} cy={p.y} r={active === p.originalIndex ? 7 : 5.5} fill="#FFFFFF" stroke={config.color} strokeWidth={active === p.originalIndex ? 3 : 2} className="tl-week-point" />}
+            <text x={p.x} y={Math.max(25,p.y-14)} textAnchor="middle" fill="#072D59" fontSize="12" fontWeight="750">{config.format(p.value)}</text>
+            <text x={p.x} y="363" textAnchor="middle" fill={active === p.originalIndex ? "#072D59" : "#60758B"} fontSize="13" fontWeight={active === p.originalIndex ? "700" : "600"}>{p.week.label}</text>
           </g>)}
           {hoveredPoint && <g className="tl-chart-tooltip" pointerEvents="none" transform={`translate(${hoverX} ${hoverY})`}>
-            <polygon points={hoverAbove ? `${hoverCaretX-6},57 ${hoverCaretX+6},57 ${hoverCaretX},66` : `${hoverCaretX-6},1 ${hoverCaretX+6},1 ${hoverCaretX},-8`} fill="#172033" />
-            <rect width="242" height="58" rx="7" fill="#172033" />
-            <text x="13" y="20" fill="#FFFDFC" fontSize="11" fontWeight="700">{hoveredPoint.week.label}</text>
+            <polygon points={hoverAbove ? `${hoverCaretX-6},57 ${hoverCaretX+6},57 ${hoverCaretX},66` : `${hoverCaretX-6},1 ${hoverCaretX+6},1 ${hoverCaretX},-8`} fill="#072D59" />
+            <rect width="242" height="58" rx="7" fill="#072D59" />
+            <text x="13" y="20" fill="#FFFFFF" fontSize="11" fontWeight="700">{hoveredPoint.week.label}</text>
             <text x="13" y="41" fill="#DCE2EA" fontSize="10.5">{hoveredPoint.week.nReviews} reviews</text>
             <text x="91" y="41" fill="#DCE2EA" fontSize="10.5">{hoveredPoint.week.avgRating == null ? "Rating —" : `${Number(hoveredPoint.week.avgRating).toFixed(2)}★`}</text>
             <text x="170" y="41" fill="#DCE2EA" fontSize="10.5">{hoveredPoint.week.nss == null ? "NSS —" : `NSS ${fmt(hoveredPoint.week.nss, 1)}`}</text>
           </g>}
           {!sparse && focus === "sentiment" && reversal && Math.abs(reversal.delta) >= 35 && points.find((p)=>p.originalIndex===reversal.index) && (() => { const rx = points.find((p)=>p.originalIndex===reversal.index).x; const calloutX = Math.min(width-164, Math.max(left+8, rx-64)); return <g className="tl-shift-callout"><rect x={calloutX} y="3" width="128" height="20" rx="10" fill="#FFF1EC"/><text x={calloutX+64} y="17" textAnchor="middle" fill="#B74C35" fontSize="9.5" fontWeight="700">Sharp sentiment shift</text></g>; })()}
         </svg>
-        {activeWeek != null && <div className="flex items-center justify-between border-t border-[#EEE9E5] px-2 py-2 text-xs"><span className="font-semibold text-[#172033]">Filtering the dashboard to {weeks[activeWeek].label}</span><button onClick={() => onSelectWeek?.(null)} className="font-semibold text-[#C85D42] hover:underline">Clear week filter</button></div>}
+        {activeWeek != null && <div className="flex items-center justify-between border-t border-[#EEE9E5] px-2 py-2 text-xs"><span className="font-semibold text-[#072D59]">Filtering the dashboard to {weeks[activeWeek].label}</span><button onClick={() => onSelectWeek?.(null)} className="font-semibold text-[#C85D42] hover:underline">Clear week filter</button></div>}
       </div>
     </Card>
   );
@@ -1045,7 +994,7 @@ function CustomerVoice({ slice, reviewsById, topicName, isDefault }) {
 
   useEffect(() => { setIdx(0); setFading(false); setManualPaused(false); setQuoteExpanded(false); setAnalysisExpanded(false); clearSwap(); }, [topicName]);
   useEffect(() => {
-    if (reduce || hover || manualPaused || items.length < 2) return;
+    if (PUBLIC_DEMO || reduce || hover || manualPaused || items.length < 2) return;
     const id = setInterval(() => {
       setFading(true);
       clearSwap();
@@ -1062,7 +1011,7 @@ function CustomerVoice({ slice, reviewsById, topicName, isDefault }) {
       <Card className="grid h-full place-items-center p-8 text-center">
         <div>
           <MessageSquare size={24} className="mx-auto text-slate-300" strokeWidth={1.75} />
-          <div className="mt-3 text-sm font-semibold text-[#172033]">No customer quotes</div>
+          <div className="mt-3 text-sm font-semibold text-[#072D59]">No customer evidence</div>
           <p className="mt-1 text-xs" style={{ color: INK2 }}>This topic has no readable reviews to show.</p>
         </div>
       </Card>
@@ -1093,7 +1042,7 @@ function CustomerVoice({ slice, reviewsById, topicName, isDefault }) {
 
       <div className="relative flex flex-1 flex-col p-5">
         <div className="relative z-10 flex flex-wrap items-center justify-between gap-2">
-          <div><span className="text-xs font-semibold uppercase tracking-wider" style={{ color: INK2 }}>Customer Voice</span><div className="mt-1 text-[11px]" style={{ color: INK3 }}>Evidence for {theme.theme}</div></div>
+          <div><span className="text-xs font-semibold uppercase tracking-wider" style={{ color: INK2 }}>Customer feedback</span><div className="mt-1 text-[11px]" style={{ color: INK3 }}>Paraphrased evidence · {theme.theme}</div></div>
           {isDefault && (
             <span className="inline-flex items-center gap-1 rounded-md bg-red-600 px-2 py-0.5 text-[10px] font-semibold text-white">
               <AlertTriangle size={10} strokeWidth={2.5} />Top pain point
@@ -1115,7 +1064,7 @@ function CustomerVoice({ slice, reviewsById, topicName, isDefault }) {
               v === "neg" ? "border-red-200 bg-red-50 text-red-700"
                 : v === "pos" ? "border-emerald-200 bg-emerald-50 text-emerald-700"
                 : "border-amber-200 bg-amber-50 text-amber-700"}`}>{hashtag(theme.theme)}</span>
-            <span className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-2 py-1 text-[11px] font-medium text-[#4B403C]">
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-2 py-1 text-[11px] font-medium text-[#38516B]">
               <SourceMark source={r.source} className="h-3.5 w-3.5" />{r.sourceLabel}
             </span>
           </div>
@@ -1132,14 +1081,14 @@ function CustomerVoice({ slice, reviewsById, topicName, isDefault }) {
 
           {/* The quote is the hero: larger, roomier, in a speech box tinted
               with the review's own emotion colour and a matching left edge. */}
-          <div className="relative mt-4 min-h-0 rounded-xl border border-[#E5DAD4] border-l-[3px] bg-white px-4 py-3 shadow-[0_5px_18px_rgba(23,32,51,.04)]" style={{ borderLeftColor: em.color }}>
-            <blockquote className={`h-[132px] pr-1 text-[15px] font-medium not-italic leading-[1.55] ${quoteExpanded ? "overflow-y-auto" : "overflow-hidden"}`} style={{ color: INK }}>
-              <span className="mr-0.5 text-2xl leading-none" style={{ color: em.color }}>“</span>
-              <span style={quoteExpanded ? undefined : { display: "-webkit-box", WebkitLineClamp: 5, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{r.text}</span>”
-            </blockquote>
+          <div className="relative mt-4 min-h-0 rounded-xl border border-[#E5DAD4] border-l-[3px] bg-white px-4 py-3 shadow-[0_5px_18px_rgba(7,45,89,.04)]" style={{ borderLeftColor: em.color }}>
+            <div className={`h-[132px] pr-1 text-[15px] font-medium not-italic leading-[1.55] ${quoteExpanded ? "overflow-y-auto" : "overflow-hidden"}`} style={{ color: INK }}>
+
+              <span style={quoteExpanded ? undefined : { display: "-webkit-box", WebkitLineClamp: 5, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{r.text}</span>
+            </div>
             {r.text.length > 220 && (
               <button type="button" onClick={() => setQuoteExpanded((v) => !v)} className="mt-1 text-[11px] font-semibold underline decoration-[#C7B8B0] underline-offset-2" style={{ color: INK2 }}>
-                {quoteExpanded ? "Show less" : "Read full review"}
+                {quoteExpanded ? "Show less" : "Read full paraphrase"}
               </button>
             )}
           </div>
@@ -1167,12 +1116,12 @@ function CustomerVoice({ slice, reviewsById, topicName, isDefault }) {
         <div className="relative z-10 mt-4 flex shrink-0 items-center justify-center border-t border-[#E7DDD7] pt-4">
           <div className="flex items-center gap-3">
             <button onClick={() => nav(-1)} aria-label="Previous review"
-              disabled={items.length < 2} className="grid h-9 w-9 place-items-center rounded-full border border-[#D8CEC8] bg-white text-[#4B403C] transition hover:border-[#F0714E] hover:text-[#172033] disabled:opacity-40">
+              disabled={items.length < 2} className="grid h-9 w-9 place-items-center rounded-full border border-[#D8CEC8] bg-white text-[#38516B] transition hover:border-[#072D59] hover:text-[#072D59] disabled:opacity-40">
               <ChevronLeft size={17} strokeWidth={2} />
             </button>
             <span className="min-w-[52px] text-center text-xs font-semibold tabular-nums" style={{ color: INK2 }}>{i + 1} of {items.length}</span>
             <button onClick={() => nav(1)} aria-label="Next review"
-              disabled={items.length < 2} className="grid h-9 w-9 place-items-center rounded-full border border-[#D8CEC8] bg-white text-[#4B403C] transition hover:border-[#F0714E] hover:text-[#172033] disabled:opacity-40">
+              disabled={items.length < 2} className="grid h-9 w-9 place-items-center rounded-full border border-[#D8CEC8] bg-white text-[#38516B] transition hover:border-[#072D59] hover:text-[#072D59] disabled:opacity-40">
               <ChevronRight size={17} strokeWidth={2} />
             </button>
           </div>
@@ -1210,7 +1159,7 @@ function ThemeRow({ t, reviewsById, active = false, onSelect }) {
   return (
     <>
       <tr onClick={toggle}
-        className={`cursor-pointer border-b transition ${
+        className={`tl-theme-row cursor-pointer border-b transition ${
           open ? "border-slate-200 bg-slate-100"
             : active ? "border-slate-100 bg-slate-50"
             : muted ? "border-slate-100 bg-slate-50/40 hover:bg-slate-50/70"
@@ -1220,18 +1169,18 @@ function ThemeRow({ t, reviewsById, active = false, onSelect }) {
               when open makes the expanding state unmistakable. */}
           {(active || open) && <span className={`absolute inset-y-0 left-0 ${open ? "w-1" : "w-[3px]"} bg-slate-900`} />}
           <ChevronRight size={16} strokeWidth={2.5}
-            className={`transition-transform ${active || open ? "text-[#4B403C]" : "text-[#8A7F79]"} ${open ? "rotate-90" : ""}`} />
+            className={`transition-transform ${active || open ? "text-[#38516B]" : "text-[#60758B]"} ${open ? "rotate-90" : ""}`} />
         </td>
         <td className="py-4 pr-4 align-middle">
-          <div className="text-sm leading-snug" style={{ color: muted ? INK3 : INK, fontWeight: (active || open) ? 700 : 600 }}>{t.theme}</div>
+          <button type="button" aria-expanded={open} onClick={(event) => { event.stopPropagation(); toggle(); }} className="tl-theme-toggle text-left text-sm leading-snug" style={{ color: muted ? INK3 : INK, fontWeight: (active || open) ? 700 : 600 }}>{t.theme}<span className="sr-only"> — {open ? "hide" : "show"} evidence</span></button>
           {muted && <div className="mt-0.5 font-sans text-[10px]" style={{ color: INK3 }}><span className="font-mono">n={t.volume}</span> · not enough data to act on</div>}
         </td>
-        <td className="py-4 pr-4 text-right align-middle font-sans text-xs tabular-nums" style={{ color: muted ? INK3 : INK2 }}>{t.volume}</td>
-        <td className="py-4 pr-4 align-middle"><ImpactBar value={t.impact} ratedN={t.impactRatedN} /></td>
-        <td className="py-4 pr-8 align-middle">
+        <td data-label="Reviews" className="py-4 pr-4 text-right align-middle font-sans text-xs tabular-nums" style={{ color: muted ? INK3 : INK2 }}>{t.volume}</td>
+        <td data-label="Rating impact" className="py-4 pr-4 align-middle"><ImpactBar value={t.impact} ratedN={t.impactRatedN} /></td>
+        <td data-label="Sentiment mix" className="py-4 pr-8 align-middle">
           <SentimentGauge mean={t.sentiment} ci={t.ci95} dist={t.distribution} nSentences={t.nSentences} />
         </td>
-        <td className="py-4 pl-5 pr-4 align-middle">
+        <td data-label="Priority" className="py-4 pl-5 pr-4 align-middle">
           <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${PRIORITY_STYLE[t.priority] || PRIORITY_STYLE.Monitor}`}>
             {t.priority}
           </span>
@@ -1239,7 +1188,7 @@ function ThemeRow({ t, reviewsById, active = false, onSelect }) {
       </tr>
 
       {open && (
-        <tr className="border-b border-slate-200 bg-slate-100/70">
+        <tr className="tl-theme-detail border-b border-slate-200 bg-slate-100/70">
           {/* Continuous left accent ties the expanded panel to its row above,
               so the block clearly reads as one expanded unit. */}
           <td className="relative"><span className="absolute inset-y-0 left-0 w-1 bg-slate-900" /></td>
@@ -1292,8 +1241,8 @@ function ThemeRow({ t, reviewsById, active = false, onSelect }) {
                         <span className="inline-flex items-center gap-1.5 font-sans text-[11px]" style={{ color: INK2 }}>
                           <SourceMark source={r.source} className="h-3.5 w-3.5" />{r.sourceLabel}
                         </span>
-                        <span className="font-sans text-[11px] text-[#8A7F79]">{r.date}</span>
-                        {r.version && <span className="font-sans text-[11px] tabular-nums text-[#8A7F79]">v{r.version}</span>}
+                        <span className="font-sans text-[11px] text-[#60758B]">{r.date}</span>
+                        {r.version && <span className="font-sans text-[11px] tabular-nums text-[#60758B]">v{r.version}</span>}
                         <span className={`ml-auto rounded-full px-2 py-0.5 font-sans text-[11px] font-semibold tabular-nums ${
                           v === "pos" ? "bg-emerald-50 text-emerald-700"
                             : v === "neg" ? "bg-red-50 text-red-700" : "bg-amber-50 text-amber-700"}`}>
@@ -1306,7 +1255,7 @@ function ThemeRow({ t, reviewsById, active = false, onSelect }) {
                 })}
               </div>
               <div className="mt-2 font-sans text-[11px] tabular-nums" style={{ color: INK3 }}>
-                Showing {evidence.length} of {(t.verbatimIds || []).length} reviews
+                Paraphrased evidence · {evidence.length} of {(t.verbatimIds || []).length} reviews
               </div>
             </div>
 
@@ -1338,25 +1287,25 @@ function ThemeMatrix({ slice, reviewsById, activeTopic, onSelectTopic }) {
   const lowVolume = filtered.filter((t) => t.priority === "Low evidence");
 
   return (
-    <Card className="flex h-[540px] min-h-[540px] flex-col overflow-hidden">
+    <Card className="tl-theme-panel flex h-[540px] min-h-[540px] flex-col overflow-hidden">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-5 py-4">
         <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h2 className="text-[15px] font-bold" style={{ color: INK }}>Theme Priorities</h2>
-          <HoverTip tip="Themes are ranked by estimated rating impact, evidence volume and sentiment. Select a row to inspect its reviews."><button type="button" aria-label="How themes are ranked" className="grid h-6 w-6 place-items-center rounded-full text-[#8A7F79] hover:bg-[#F5F0ED] hover:text-[#172033]"><Info size={14} /></button></HoverTip>
+          <h2 className="text-[15px] font-bold" style={{ color: INK }}>Theme priorities</h2>
+          <HoverTip tip="Themes are ranked by estimated rating impact, evidence volume and sentiment. Select a row to inspect its reviews."><button type="button" aria-label="How themes are ranked" className="grid h-6 w-6 place-items-center rounded-full text-[#60758B] hover:bg-[#F5F0ED] hover:text-[#072D59]"><Info size={14} /></button></HoverTip>
           <span className="text-[11px] font-medium" style={{ color: INK3 }}>{slice.themes.length} ranked themes</span>
         </div>
         <div className="ml-auto flex items-center gap-1.5">
-          <button onClick={() => setSentiment("all")}
+          <button aria-pressed={sentiment === "all"} onClick={() => setSentiment("all")}
             className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium shadow outline-none transition hover:-translate-y-px hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-1 ${
               sentiment === "all"
                 ? "border-slate-900 bg-slate-900 text-white shadow-md focus-visible:ring-slate-900"
-                : "border-slate-200 bg-white text-[#4B403C] shadow-slate-900/5 hover:bg-slate-50 focus-visible:ring-slate-400"}`}>
+                : "border-slate-200 bg-white text-[#38516B] shadow-slate-900/5 hover:bg-slate-50 focus-visible:ring-slate-400"}`}>
             All
           </button>
           {SENTIMENTS.map((x) => {
             const on = sentiment === x.id;
             return (
-              <button key={x.id} onClick={() => setSentiment(x.id)}
+              <button key={x.id} aria-pressed={sentiment === x.id} onClick={() => setSentiment(x.id)}
                 className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium shadow outline-none transition hover:-translate-y-px hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-1 ${
                   on ? `${x.active} shadow-md ${x.ring}` : `${x.tint} shadow-slate-900/5 ${x.ring}`}`}>
                 {x.label}
@@ -1370,13 +1319,13 @@ function ThemeMatrix({ slice, reviewsById, activeTopic, onSelectTopic }) {
       </div>
       <div className="relative min-h-0 flex-1 overflow-hidden">
       <div className="h-full overflow-auto">
-        <table className="w-full table-fixed">
+        <table className="tl-theme-table w-full table-fixed">
           <colgroup>
             <col style={{ width: "42px" }} />
             <col />
             <col style={{ width: "78px" }} />
             <col style={{ width: "112px" }} />
-            <col style={{ width: "34%" }} />
+            <col style={{ width: "23%" }} />
             <col style={{ width: "136px" }} />
           </colgroup>
           <thead className="sticky top-0 z-10 bg-white">
@@ -1392,9 +1341,9 @@ function ThemeMatrix({ slice, reviewsById, activeTopic, onSelectTopic }) {
           <tbody>
             {filtered.length === 0 && (
               <tr><td colSpan={6} className="px-5 py-10 text-center">
-                <p className="text-sm text-[#8A7F79]">No topics are net {VALENCE_LABEL[sentiment]?.toLowerCase()}.</p>
-                <button onClick={() => setSentiment("all")}
-                  className="mt-2 text-sm font-medium text-[#172033] underline underline-offset-2">
+                <p className="text-sm text-[#60758B]">No topics are net {VALENCE_LABEL[sentiment]?.toLowerCase()}.</p>
+                <button aria-pressed={sentiment === "all"} onClick={() => setSentiment("all")}
+                  className="mt-2 text-sm font-medium text-[#072D59] underline underline-offset-2">
                   Show all topics
                 </button>
               </td></tr>
@@ -1409,7 +1358,7 @@ function ThemeMatrix({ slice, reviewsById, activeTopic, onSelectTopic }) {
                   className="cursor-pointer border-b border-slate-100 bg-slate-50/70 transition hover:bg-slate-100/70">
                   <td className="py-2.5 pl-5">
                     <ChevronRight size={14} strokeWidth={2.5}
-                      className={`text-[#8A7F79] transition-transform ${showLowVolume ? "rotate-90" : ""}`} />
+                      className={`text-[#60758B] transition-transform ${showLowVolume ? "rotate-90" : ""}`} />
                   </td>
                   <td colSpan={5} className="py-2.5 pr-5 font-sans text-[11px]" style={{ color: INK2 }}>
                     {lowVolume.length} low-evidence topic{lowVolume.length > 1 ? "s" : ""} — too few mentions to act on with confidence
@@ -1428,15 +1377,15 @@ function ThemeMatrix({ slice, reviewsById, activeTopic, onSelectTopic }) {
       {slice.untagged && slice.untagged.count > 0 && (
         <div className="border-t border-slate-100 bg-[#FAF8F6] px-5 py-3">
           <div className="flex items-center gap-3">
-            <Info size={14} className="shrink-0 text-[#8A7F79]" strokeWidth={2} />
+            <Info size={14} className="shrink-0 text-[#60758B]" strokeWidth={2} />
             <p className="min-w-0 text-[12px] leading-relaxed" style={{ color: INK2 }}>
               <span className="font-semibold" style={{ color: INK }}>{slice.untagged.count} reviews could not be assigned to a specific theme.</span>
               <span className="ml-1">They remain in totals and evidence coverage.</span>
             </p>
-            {slice.untagged.examples?.length > 0 && <button type="button" onClick={() => setShowUnclassified((v) => !v)} className="ml-auto shrink-0 text-[11px] font-semibold text-[#A14A42] underline-offset-2 hover:underline" aria-expanded={showUnclassified}>{showUnclassified ? "Hide examples" : "Review unclassified feedback"}</button>}
+            {slice.untagged.examples?.length > 0 && <button type="button" onClick={() => setShowUnclassified((v) => !v)} className="ml-auto shrink-0 text-[11px] font-semibold text-[#072D59] underline-offset-2 hover:underline" aria-expanded={showUnclassified}>{showUnclassified ? "Hide examples" : "Review unclassified feedback"}</button>}
           </div>
           {showUnclassified && slice.untagged.examples?.length > 0 && <div className="mt-2 grid gap-1.5 border-l-2 border-[#D9CBC4] pl-4">
-            {slice.untagged.examples.slice(0, 3).map((e, i) => <p key={i} className="truncate text-[11px] italic text-[#6F625C]">“{e}”</p>)}
+            {slice.untagged.examples.slice(0, 3).map((e, i) => <p key={i} className="truncate text-[11px] italic text-[#526980]">{e}</p>)}
           </div>}
         </div>
       )}
@@ -1574,7 +1523,7 @@ function KeyFindings({ slice }) {
   const { DATA, NARR } = useAppData();
   const chapter = insightChapter(slice, DATA, NARR);
   return (
-    <Card surface="bg-[#F3E9E5]" className="tl-story-card tl-story-findings relative flex h-full flex-col overflow-hidden border-[#C9BBB4] p-6 sm:p-8">
+    <Card surface="bg-[#DBF2FC]" className="tl-story-card tl-story-findings relative flex h-full flex-col overflow-hidden border-[#BED7E8] p-6 sm:p-8">
       <CardMotif variant="findings" className="-right-12 -top-14 w-60 rotate-180" />
       <div className="relative z-10 flex h-full flex-col">
         <div>
@@ -1584,9 +1533,9 @@ function KeyFindings({ slice }) {
           </p>
         </div>
 
-        <div className="mt-6 border-t border-[#D8CBC5]">
+        <div className="mt-6 border-t border-[#C5DCEB]">
           {(chapter.findings || []).map((row, i) => (
-            <div key={i} className="grid grid-cols-[5.25rem_1fr] gap-3 border-b border-[#D8CBC5] py-3.5">
+            <div key={i} className="grid grid-cols-[5.25rem_1fr] gap-3 border-b border-[#C5DCEB] py-3.5">
               <div className="pt-0.5 text-[10.5px] font-bold uppercase tracking-[0.08em]" style={{ color: i === 0 ? "#C94747" : INK3 }}>
                 {row.label || `Insight ${String(i + 1).padStart(2, "0")}`}
               </div>
@@ -1601,7 +1550,7 @@ function KeyFindings({ slice }) {
 
         <div className="mt-auto pt-5">
           <div className="rounded-lg border border-[#D2C2BB] bg-white/55 px-4 py-3.5">
-            <div className="text-[10.5px] font-bold uppercase tracking-[0.09em]" style={{ color: "#A14A42" }}>The implication</div>
+            <div className="text-[10.5px] font-bold uppercase tracking-[0.09em]" style={{ color: "#072D59" }}>The implication</div>
             <p className="mt-1.5 text-[13px] font-medium leading-relaxed" style={{ color: INK }}>{chapter.implication}</p>
           </div>
         </div>
@@ -1625,7 +1574,7 @@ function PlatformEmotion({ slice }) {
     { key: "pctNegative", label: "Negative ratio", min: 0, max: 100, fmt: (v) => `${Math.round(v)}%` },
     { key: "nReviews", label: "Review volume", min: 0, max: maxVol, fmt: (v) => v },
   ];
-  const PLAT_COLOR = { google_play: "#172033", app_store: "#A99C94" };
+  const PLAT_COLOR = { google_play: "#072D59", app_store: "#A99C94" };
   const platColor = (id) => PLAT_COLOR[id] || "#756A64";
   const posOf = (v, m) => Math.max(0, Math.min(100, ((v - m.min) / (m.max - m.min)) * 100));
   const platforms = DATA.platform.slice(0, 2);
@@ -1711,7 +1660,7 @@ function PlatformEmotion({ slice }) {
               const dominant = idx < 3;
               const pct = total ? Math.round((e.count / total) * 100) : 0;
               return (
-                <div key={e.label} className="grid grid-cols-[104px_minmax(80px,1fr)_34px_34px] items-center gap-x-2.5">
+                <div key={e.label} className="tl-emotion-row grid grid-cols-[104px_minmax(80px,1fr)_34px_34px] items-center gap-x-2.5">
                   <span className={`flex min-w-0 items-center gap-1.5 ${dominant ? "text-[13px] font-semibold" : "text-xs"}`} style={{ color: dominant ? INK : INK2 }}>
                     <span aria-hidden="true" className="text-[13px] leading-none">{em.emoji}</span><span className="truncate">{em.label}</span>
                   </span>
@@ -1749,20 +1698,20 @@ function ValidationPlot({ slice, reviews, onViewDetail }) {
   const v = slice.validation;
   const strength = v.testable ? correlationStrength(v.spearman_rho) : null;
   const verdict = !v.testable
-    ? { head: "Not testable here", tone: "text-[#8A7F79]" }
+    ? { head: "Not testable here", tone: "text-[#60758B]" }
     : strength === "Strong" ? { head: "Yes — strongly.", tone: "text-emerald-700" }
     : strength === "Moderate" ? { head: "Broadly, yes.", tone: "text-amber-600" }
     : { head: "Not reliably.", tone: "text-red-600" };
 
   return (
-    <Card surface="bg-[#F3F6F1]" className="relative flex h-full flex-col overflow-hidden">
+    <Card surface="bg-[#F5F9FC]" className="relative flex h-full flex-col overflow-hidden">
       <CardMotif variant="trust" className="-bottom-12 -right-12 w-52" />
       {/* Hierarchy: statement → ratio → consistent vs contradict → correlation. */}
       <div className="relative flex flex-1 flex-col px-6 py-5">
-        <h2 className="text-[17px] font-bold tracking-tight" style={{ color: INK }}>Can we trust the analysis?</h2>
-        <div className={`mt-2 text-[22px] font-bold tracking-tight ${verdict.tone}`}>{NARR.trustStatement || verdict.head}</div>
+        <h2 className="text-[17px] font-bold tracking-tight" style={{ color: INK }}>How well does sentiment align?</h2>
+        <div className={`mt-2 text-[22px] font-bold tracking-tight ${verdict.tone}`}>{strength ? `${strength} rating alignment` : "Insufficient evidence"}</div>
         <p className="mt-1 max-w-md text-[13px] leading-relaxed" style={{ color: INK2 }}>
-          {NARR.trustExplanation || `Written sentiment matches the star rating's direction in ${nConsistent} of ${pts.length} reviews.`}
+          {`Sentiment and star ratings point in the same direction in ${nConsistent} of ${pts.length} reviews. This checks consistency, not the accuracy of every finding.`}
         </p>
 
         <div className="mt-5 flex items-baseline gap-1">
@@ -1811,7 +1760,7 @@ function ValidationExpanded({ slice, reviews, onBack }) {
   const v = slice.validation;
   const strength = v.testable ? correlationStrength(v.spearman_rho) : null;
   const verdict = !v.testable
-    ? { head: "Not testable here", tone: "text-[#8A7F79]" }
+    ? { head: "Not testable here", tone: "text-[#60758B]" }
     : strength === "Strong" ? { head: "Yes — strongly.", tone: "text-emerald-700" }
     : strength === "Moderate" ? { head: "Broadly, yes.", tone: "text-amber-600" }
     : { head: "Not reliably.", tone: "text-red-600" };
@@ -1838,14 +1787,14 @@ function ValidationExpanded({ slice, reviews, onBack }) {
   }, []);
 
   return (
-    <Card surface="bg-[#F3F6F1]" className="p-6">
+    <Card surface="bg-[#F5F9FC]" className="p-6">
       {/* Trust summary stays at the top */}
       <div className="flex flex-wrap items-start justify-between gap-x-8 gap-y-4">
         <div className="max-w-md">
-          <h2 className="text-[17px] font-bold tracking-tight" style={{ color: INK }}>Can we trust the analysis?</h2>
-          <div className={`mt-1.5 text-[20px] font-bold tracking-tight ${verdict.tone}`}>{NARR.trustStatement || verdict.head}</div>
+          <h2 className="text-[17px] font-bold tracking-tight" style={{ color: INK }}>How well does sentiment align?</h2>
+          <div className={`mt-1.5 text-[20px] font-bold tracking-tight ${verdict.tone}`}>{strength ? `${strength} rating alignment` : "Insufficient evidence"}</div>
           <p className="mt-1 text-[13px] leading-relaxed" style={{ color: INK2 }}>
-            {NARR.trustExplanation || `Written sentiment matches the star rating's direction in ${nConsistent} of ${pts.length} reviews.`}
+            {`Sentiment and star ratings point in the same direction in ${nConsistent} of ${pts.length} reviews. This checks consistency, not the accuracy of every finding.`}
           </p>
         </div>
         <div className="w-full max-w-xs">
@@ -2035,7 +1984,7 @@ function NextSteps({ onSelect, activeIdx, store = "all" }) {
     <Card className="tl-story-card tl-story-actions relative flex h-full flex-col overflow-hidden p-6 sm:p-8">
       <CardMotif variant="actions" className="-bottom-14 -right-12 w-52" />
       <div className="relative">
-        <div className="flex items-start justify-between gap-4"><h2 className="text-[17px] font-bold tracking-tight" style={{ color: "#172033" }}>What to do next</h2><InsightPeriodStamp /></div>
+        <div className="flex items-start justify-between gap-4"><h2 className="text-[17px] font-bold tracking-tight" style={{ color: "#072D59" }}>What to do next</h2><InsightPeriodStamp /></div>
         <p className="mt-2 max-w-2xl text-[14px] leading-relaxed" style={{ color: INK2 }}>
           Ranked by priority. Each recommendation says what to change; open one for interventions, evidence and ownership.
           {store !== "all" && <span className="ml-1" style={{ color: INK3 }}>Recommendations currently reflect the all-source analysis.</span>}
@@ -2059,7 +2008,7 @@ function NextSteps({ onSelect, activeIdx, store = "all" }) {
                 </span>
                 <div>
                   <div className="text-[12px] font-semibold" style={{ color: lead ? "#D94A4A" : INK2 }}>{tier}</div>
-                  <div className="mt-0.5 text-[14.5px] font-semibold leading-snug" style={{ color: "#172033" }}>
+                  <div className="mt-0.5 text-[14.5px] font-semibold leading-snug" style={{ color: "#072D59" }}>
                     {stepHeadline(s)}
                   </div>
                   <p className="mt-1 text-[13px] leading-relaxed" style={{ color: INK2 }}>{stepSubline(s)}</p>
@@ -2073,7 +2022,7 @@ function NextSteps({ onSelect, activeIdx, store = "all" }) {
         })}
       </ol>
       ) : (
-        <div className="mt-6 rounded-lg border border-[#D8CEC8] bg-[#FFF9F6] px-4 py-5 text-[13px] leading-relaxed" style={{ color: INK2 }}>
+        <div className="mt-6 rounded-lg border border-[#D8CEC8] bg-[#F0F7FC] px-4 py-5 text-[13px] leading-relaxed" style={{ color: INK2 }}>
           Not enough evidence in this view to reprioritize actions confidently.
         </div>
       )}
@@ -2170,7 +2119,7 @@ function ActionDrawer({ index, onClose }) {
     <div className="fixed bottom-0 left-0 right-0 top-[69px] z-40">
       <div className={`absolute inset-0 bg-slate-900/30 transition-opacity duration-300 ease-out ${visible ? "opacity-100" : "opacity-0"}`}
         onClick={onClose} />
-      <div className={`absolute inset-y-0 right-0 flex w-full max-w-[460px] flex-col border-l border-[#D8D3CF] bg-white shadow-2xl transition-transform duration-300 ease-out ${
+      <div className={`absolute inset-y-0 right-0 flex w-full max-w-[460px] flex-col border-l border-[#D5E1EB] bg-white shadow-2xl transition-transform duration-300 ease-out ${
         visible ? "translate-x-0" : "translate-x-full"}`}>
         {/* Recommendation header */}
         <div className="flex items-start justify-between gap-4 border-b border-slate-100 px-6 py-5">
@@ -2312,11 +2261,11 @@ function EvidencePreview({ liveRefreshState = "running" }) {
           <div className="text-sm" style={{ color: INK2 }}>You are viewing app review data for</div>
           <div className="mt-0.5"><CompanySwitcher /></div>
           <div className="mt-3.5 flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 rounded-md border border-[#F0D4CB] bg-[#FFF7F4] px-2.5 py-1.5 text-xs font-semibold text-[#A6533E]"><RefreshCw size={13} className="animate-spin" />Live intelligence enriching</span>
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-[#F0D4CB] bg-[#FFF7F4] px-2.5 py-1.5 text-xs font-semibold text-[#072D59]"><RefreshCw size={13} className="animate-spin" />Live intelligence enriching</span>
             <span className="text-sm" style={{ color: INK2 }}><span className="font-semibold" style={{ color: INK }}>{reviews.length}</span> reviews collected</span>
           </div>
         </div>
-        <div className="max-w-[460px] rounded-xl border border-[#E7DED9] bg-[#FFFDFC] px-4 py-3 text-[12px] leading-relaxed text-[#6F625C]">
+        <div className="max-w-[460px] rounded-xl border border-[#E7DED9] bg-[#FFFFFF] px-4 py-3 text-[12px] leading-relaxed text-[#526980]">
           Ratings, sources and verbatims are ready. Throughline is now adding sentiment, themes, rating impact and recommendations in the background.
         </div>
       </div>
@@ -2380,10 +2329,10 @@ function InsightGenerator({ state, onGenerate, reviewCount, publicDemo = false }
   const ready = state === "ready";
   const failed = state === "error";
   return (
-    <Card className={`relative z-20 overflow-visible transition-colors duration-500 ${generating ? "border-[#F0714E]/50 bg-[#FFF7F3]" : "bg-[#FBF8F6]"}`}>
+    <Card className={`relative z-20 overflow-visible transition-colors duration-500 ${generating ? "border-[#072D59]/50 bg-[#EEF6FC]" : "bg-[#F5F9FC]"}`}>
       <div className="flex flex-col items-center justify-center px-6 py-7 text-center">
         <div className="flex items-center gap-2"><button type="button" onClick={onGenerate} disabled={generating}
-          className={`group inline-flex min-w-[230px] items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold shadow-sm transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-[#F0714E]/25 ${ready || generating ? "bg-[#F0714E] text-white" : "bg-[#DED8D4] text-[#554B46] hover:bg-[#D2CAC5]"}`}>
+          className={`group inline-flex min-w-[230px] items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold shadow-sm transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-[#072D59]/25 ${ready || generating ? "bg-[#072D59] text-white" : "bg-[#DED8D4] text-[#554B46] hover:bg-[#D2CAC5]"}`}>
           <Sparkles size={17} className={generating ? "animate-pulse" : "transition-transform group-hover:rotate-6"} />
           {generating ? "Generating insights…" : ready ? "Regenerate insights & actions" : failed ? "Try generating again" : "Generate insights & actions"}
         </button><InfoPopover label="How insight generation works"><strong className="block text-[11px]">What happens when you generate</strong><span className="mt-1 block text-slate-300">Throughline sends the analyzed themes and supporting evidence for synthesis into an executive summary and ranked actions. This is the credit-using step; review collection and the core dashboard are already complete.</span></InfoPopover></div>
@@ -2393,7 +2342,7 @@ function InsightGenerator({ state, onGenerate, reviewCount, publicDemo = false }
             <div className="mt-2 text-xs font-medium text-[#7B655D]">Synthesizing {reviewCount} reviews into findings and ranked actions</div>
           </div>
         ) : (
-          <p className={`mt-2 text-xs ${failed ? "text-red-600" : "text-[#8A7F79]"}`}>{failed ? "Insight generation did not complete. Your evidence remains available and no result was replaced." : publicDemo ? "Portfolio demo uses a cached synthesis and does not call a live model." : "Uses AI credits to create an executive summary and prioritized recommendations."}</p>
+          <p className={`mt-2 text-xs ${failed ? "text-red-600" : "text-[#60758B]"}`}>{failed ? "Insight generation did not complete. Your evidence remains available and no result was replaced." : publicDemo ? "Portfolio demo uses a cached synthesis and does not call a live model." : "Uses AI credits to create an executive summary and prioritized recommendations."}</p>
         )}
       </div>
     </Card>
@@ -2422,12 +2371,12 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
   const [activeStepIdx, setActiveStepIdx] = useState(null); // action drawer selection
   const [showValidation, setShowValidation] = useState(false); // full-width detailed validation
   const [activeWeek, setActiveWeek] = useState(null);
-  const [insightState, setInsightState] = useState(publicDemo ? "idle" : DATA?.narrative ? "ready" : "idle");
+  const [insightState, setInsightState] = useState(DATA?.narrative ? "ready" : "idle");
   useEffect(() => { setShowValidation(false); }, [store]); // reset when scope changes
   useEffect(() => { setActiveTopic(null); }, [store]); // topics differ per scope
   useEffect(() => { setActiveWeek(null); }, [store]);
   useEffect(() => { setActiveTopic(null); }, [activeWeek]);
-  useEffect(() => { setInsightState(publicDemo ? "idle" : DATA?.narrative ? "ready" : "idle"); }, [activeSlug, DATA?.narrative, publicDemo]);
+  useEffect(() => { setInsightState(DATA?.narrative ? "ready" : "idle"); }, [activeSlug, DATA?.narrative, publicDemo]);
   const generateInsights = async () => {
     setInsightState("generating");
     if (publicDemo) {
@@ -2467,13 +2416,13 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
   const progressProcessed = Number(DATA?.analysisProgress?.processedReviews || 0);
   const progressTotal = Number(DATA?.analysisProgress?.totalReviews || slice.kpis.nReviews || 0);
   const progressStage = ["Discovering reviews", "Analysing feedback", "Finding themes", "Building recommendations"][Math.min(3, liveStage)] || "Analysing feedback";
-  const demoResolving = publicDemo && liveRefreshState === "running";
+  const demoResolving = false; // Cached snapshots are immediately usable during a demo replay.
   const showResolvedKpis = !demoResolving || liveStage >= 1;
   const showResolvedChart = !demoResolving || liveStage >= 2;
   const showResolvedBody = !demoResolving || liveStage >= 3;
   return (
-    <div className="px-8 py-5">
-      <div className="tl-reveal-section flex flex-wrap items-center justify-between gap-4 border-b border-[#DDD6D1] pb-4">
+    <main className="tl-dashboard-content">
+      <div className="tl-reveal-section flex flex-wrap items-center justify-between gap-4 border-b border-[#D5E1EB] pb-4">
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-5 gap-y-3">
           {/* A sentence lead-in, not a report title — signals the company is a
               switchable selection, with the company as the dominant anchor.
@@ -2483,17 +2432,17 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
               date-range picker, then the review / scored-phrase counts. */}
           <div className="flex flex-wrap items-center gap-2.5">
             <SourceSelector store={store} setStore={setStore} />
-            {dateRange && <DatePicker readOnly={publicDemo} current={DATA?.ingestion?.window?.effective_days || 30} onSelect={onExtendWindow} range={`${DATA?.ingestion?.window?.effective_days || 30} days · ${dateRange}`} />}
+            {dateRange && <DatePicker readOnly={publicDemo} current={DATA?.ingestion?.window?.effective_days || 30} onSelect={onExtendWindow} range={publicDemo ? `Reviews dated ${dateRange}` : `${DATA?.ingestion?.window?.effective_days || 30} days · ${dateRange}`} />}
             <span className="text-sm" style={{ color: INK2 }}>
               <span className="font-semibold" style={{ color: INK }}>{slice.kpis.nReviews}</span> reviews
               <span className="mx-1.5 text-slate-300">·</span>
-              <span className="font-semibold text-[#4B403C]">{slice.kpis.nPhrases}</span> scored phrases
+              <span className="font-semibold text-[#38516B]">{slice.kpis.nPhrases}</span> scored phrases
             </span>
-            {liveRefreshState !== "running" && <button type="button" onClick={onRefreshData} className="inline-flex min-w-[92px] items-center justify-center gap-1.5 rounded-md border border-[#DED6D1] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#4B403C] hover:bg-[#FFF9F6]"><RefreshCw size={13} />Refresh data</button>}
+            {liveRefreshState !== "running" && <button type="button" onClick={onRefreshData} className="inline-flex min-w-[92px] items-center justify-center gap-1.5 rounded-md border border-[#D5E1EB] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#38516B] hover:bg-[#F0F7FC]"><RefreshCw size={13} />{publicDemo ? "Replay demo" : "Refresh data"}</button>}
             {liveRefreshState === "running" && <><div className="tl-processing-compact" role="status" aria-live="polite">
               <span className="tl-processing-mark" aria-hidden="true"><i /></span>
-              <span className="min-w-0"><strong>Updating review data</strong><small>{progressTotal || slice.kpis.nReviews} found · {progressStage}</small></span>
-              <span className="tl-processing-time">~2 min</span>
+              <span className="min-w-0"><strong>{publicDemo ? "Loading cached evidence" : "Updating review data"}</strong><small>{progressTotal || slice.kpis.nReviews} found · {progressStage}</small></span>
+              <span className="tl-processing-time">{publicDemo ? "Demo replay" : "~2 min"}</span>
             </div><InfoPopover attention label="What is happening in the background"><strong className="block text-[11px]">Updating the evidence base</strong><span className="mt-1 block text-slate-300">Throughline is collecting reviews, scoring customer phrases and organizing them into themes. The dashboard resolves progressively as each stage finishes.{publicDemo ? " This portfolio demonstration replays that workflow from a cached snapshot and makes no external calls." : ""}</span></InfoPopover></>}
           </div>
           {(() => {
@@ -2502,16 +2451,16 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
             const reviewCount = Number(windowMeta.review_count ?? slice.kpis.nReviews ?? 0);
             const minimum = Number(windowMeta.minimum_reviews || 25);
             const options = [60, 90, 180].filter((days) => days > effectiveDays);
-            if (effectiveDays < 30 || reviewCount >= minimum || !options.length) return null;
+            if (publicDemo || effectiveDays < 30 || reviewCount >= minimum || !options.length) return null;
             const primaryCount = Number(windowMeta.primary_review_count || 0);
             return (
-              <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-[#E6D8D1] bg-[#FFF9F6] px-3 py-2 text-xs text-[#5E514A]">
-                <span className="font-semibold text-[#172033]">Limited recent evidence.</span>
+              <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-[#E6D8D1] bg-[#F0F7FC] px-3 py-2 text-xs text-[#5E514A]">
+                <span className="font-semibold text-[#072D59]">Limited recent evidence.</span>
                 <span>{primaryCount ? `${primaryCount} reviews in ${windowMeta.requested_days || 30} days · ` : ""}{reviewCount} reviews in the last {effectiveDays} days.</span>
                 <span>Extend the evidence window?</span>
                 {options.slice(0, 3).map((days) => (
                   <button key={days} type="button" onClick={() => onExtendWindow?.(days)}
-                    className="rounded-md border border-[#DCCFC8] bg-white px-2.5 py-1 font-semibold text-[#A6533E] hover:bg-[#FFF4EF]">
+                    className="rounded-md border border-[#DCCFC8] bg-white px-2.5 py-1 font-semibold text-[#072D59] hover:bg-[#FFF4EF]">
                     {days === 60 ? "60 days" : days === 90 ? "90 days" : "6 months"}
                   </button>
                 ))}
@@ -2524,6 +2473,21 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
       </div>
 
       <div className="tl-reveal-section mt-3">{showResolvedKpis ? <KpiRow slice={displaySlice} store={store} /> : <KpiLoadingRow slice={displaySlice} />}</div>
+      {/* Lower dashboard as one narrative, two rows:
+          Row 1 — what we found (Key Findings) → what to do (Next Steps).
+          Row 2 — what evidence explains it (Platform & Emotion) → why we
+          trust it (Model Validation). Both rows are the same 50/50 grid so
+          their outer edges line up and the four cards read as one section. */}
+      {showResolvedBody && insightState === "ready" && showSteps ? (
+        <div className="tl-reveal-section mt-4 grid grid-cols-1 items-stretch gap-4 lg:grid-cols-2">
+          <KeyFindings slice={displaySlice} />
+          <NextSteps onSelect={setActiveStepIdx} activeIdx={activeStepIdx} store={store} />
+        </div>
+      ) : showResolvedBody && insightState === "ready" ? (
+        <div className="tl-reveal-section mt-4"><KeyFindings slice={displaySlice} /></div>
+      ) : null}
+
+
       <div className="tl-reveal-section mt-3">{showResolvedChart ? <WeeklyPulse key={store} weeks={slice.weekly || []} activeWeek={activeWeek} onSelectWeek={setActiveWeek} /> : <WeeklyPulseLoading />}</div>
 
       {/* Matrix left and dominant (70%), Customer Voice right (30%). items-stretch
@@ -2541,21 +2505,7 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
         </div>
       </div>}
 
-      {showResolvedBody && <div className="tl-reveal-section mt-4"><InsightGenerator publicDemo={publicDemo} state={insightState} onGenerate={generateInsights} reviewCount={displaySlice.kpis.nReviews} /></div>}
-
-      {/* Lower dashboard as one narrative, two rows:
-          Row 1 — what we found (Key Findings) → what to do (Next Steps).
-          Row 2 — what evidence explains it (Platform & Emotion) → why we
-          trust it (Model Validation). Both rows are the same 50/50 grid so
-          their outer edges line up and the four cards read as one section. */}
-      {showResolvedBody && insightState === "ready" && showSteps ? (
-        <div className="tl-reveal-section mt-4 grid grid-cols-1 items-stretch gap-4 lg:grid-cols-2">
-          <KeyFindings slice={displaySlice} />
-          <NextSteps onSelect={setActiveStepIdx} activeIdx={activeStepIdx} store={store} />
-        </div>
-      ) : showResolvedBody && insightState === "ready" ? (
-        <div className="tl-reveal-section mt-4"><KeyFindings slice={displaySlice} /></div>
-      ) : null}
+      {!publicDemo && showResolvedBody && <div className="tl-reveal-section mt-4"><InsightGenerator publicDemo={publicDemo} state={insightState} onGenerate={generateInsights} reviewCount={displaySlice.kpis.nReviews} /></div>}
 
       {/* Analytical drill-down expands IN PLACE: clicking "View detailed
           validation" swaps this row for a full-width Trust panel (Evidence
@@ -2572,7 +2522,7 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
       </div>
 
       <ActionDrawer index={activeStepIdx} onClose={() => setActiveStepIdx(null)} />
-    </div>
+    </main>
   );
 }
 
@@ -2592,10 +2542,10 @@ function ReviewCard({ r }) {
           </div>
           <div className="leading-tight">
             {/* Store reviews are anonymous — the store is the identity we have. */}
-            <div className="text-[15px] font-bold text-[#172033]">
+            <div className="text-[15px] font-bold text-[#072D59]">
               {r.source === "app_store" ? "App Store User" : "Google Play User"}
             </div>
-            <div className="mt-1 flex items-center gap-1.5 text-[13px] text-[#8A7F79]">
+            <div className="mt-1 flex items-center gap-1.5 text-[13px] text-[#60758B]">
               <SourceMark source={r.source} className="h-3.5 w-3.5" />
               <span>{r.sourceLabel}</span>
               <span className="text-slate-300">•</span>
@@ -2616,7 +2566,7 @@ function ReviewCard({ r }) {
         </div>
       </div>
 
-      <p className="mt-4 border-b border-slate-100 pb-4 text-[14px] leading-relaxed text-[#4B403C]">{r.text}</p>
+      <p className="mt-4 border-b border-slate-100 pb-4 text-[14px] leading-relaxed text-[#38516B]">{r.text}</p>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
         {r.themes.map((t) => (
@@ -2629,14 +2579,14 @@ function ReviewCard({ r }) {
           </span>
         ))}
         {r.primaryEmotion && (
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 font-sans text-[12px] text-[#4B403C]">
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 font-sans text-[12px] text-[#38516B]">
             <span aria-hidden="true">{emotionOf(r.primaryEmotion).emoji}</span>{emotionOf(r.primaryEmotion).label}
           </span>
         )}
       </div>
 
       <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
-        <span className="inline-flex items-center gap-2 text-sm font-medium text-[#4B403C]">
+        <span className="inline-flex items-center gap-2 text-sm font-medium text-[#38516B]">
           <Eye size={16} strokeWidth={2} />View Details
         </span>
         <button className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800">
@@ -2672,10 +2622,10 @@ function ExplorerView({ store, sentiment, query, rating, setRating, sort, setSor
 
   return (
     <div className="px-8 py-7">
-      <h1 className="text-[32px] font-bold tracking-tight text-[#172033]">Review Explorer</h1>
-      <p className="mt-1 text-sm text-[#8A7F79]">Analyze qualitative feedback across all channels.</p>
+      <h1 className="text-[32px] font-bold tracking-tight text-[#072D59]">Review Explorer</h1>
+      <p className="mt-1 text-sm text-[#60758B]">Analyze qualitative feedback across all channels.</p>
 
-      <div className="mt-4 font-sans text-[11px] tabular-nums text-[#8A7F79]">
+      <div className="mt-4 font-sans text-[11px] tabular-nums text-[#60758B]">
         {rows.length} of {DATA.reviews.length} reviews
       </div>
 
@@ -2684,8 +2634,8 @@ function ExplorerView({ store, sentiment, query, rating, setRating, sort, setSor
           <Card className="col-span-full grid place-items-center px-8 py-16 text-center">
             <div>
               <Search size={24} className="mx-auto text-slate-300" strokeWidth={1.75} />
-              <div className="mt-3 text-sm font-semibold text-[#172033]">No reviews match</div>
-              <p className="mt-1 text-sm text-[#8A7F79]">Try clearing a filter or the search box.</p>
+              <div className="mt-3 text-sm font-semibold text-[#072D59]">No reviews match</div>
+              <p className="mt-1 text-sm text-[#60758B]">Try clearing a filter or the search box.</p>
             </div>
           </Card>
         )}
@@ -2701,12 +2651,12 @@ function ExplorerView({ store, sentiment, query, rating, setRating, sort, setSor
 function PlaceholderView({ label }) {
   return (
     <div className="px-8 py-7">
-      <h1 className="text-[28px] font-bold tracking-tight text-[#172033]">{label}</h1>
+      <h1 className="text-[28px] font-bold tracking-tight text-[#072D59]">{label}</h1>
       <Card className="mt-6 grid place-items-center px-8 py-20 text-center">
         <div>
           <LineChart size={28} strokeWidth={1.75} className="mx-auto text-slate-300" />
-          <div className="mt-4 text-sm font-semibold text-[#172033]">{label} is not built yet</div>
-          <p className="mt-1.5 max-w-sm text-sm text-[#8A7F79]">
+          <div className="mt-4 text-sm font-semibold text-[#072D59]">{label} is not built yet</div>
+          <p className="mt-1.5 max-w-sm text-sm text-[#60758B]">
             Dashboard and Review Explorer are the two implemented views.
           </p>
         </div>
@@ -2716,12 +2666,12 @@ function PlaceholderView({ label }) {
 }
 
 const Dropdown = ({ value, onChange, options }) => (
-  <label className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-[#4B403C]">
+  <label className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-[#38516B]">
     <select value={value} onChange={(e) => onChange(e.target.value)}
       className="cursor-pointer appearance-none bg-transparent pr-4 focus:outline-none">
       {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
     </select>
-    <ChevronDown size={15} strokeWidth={2} className="pointer-events-none -ml-4 text-[#8A7F79]" />
+    <ChevronDown size={15} strokeWidth={2} className="pointer-events-none -ml-4 text-[#60758B]" />
   </label>
 );
 
@@ -2985,11 +2935,10 @@ export default function App() {
 
   return (
     <AppDataContext.Provider value={{ DATA, NARR, activeSlug, setActiveSlug, companies: runtimeCompanies, setRuntimeCompanies }}>
-    <div className={`${entryStage === "revealing" ? "tl-dashboard-reveal " : ""}min-h-screen bg-[#F6F3F1] font-sans text-[#172033] antialiased`}>
+    <div className={`${entryStage === "revealing" ? "tl-dashboard-reveal " : ""}min-h-screen bg-[#F5F9FC] font-sans text-[#072D59] antialiased`}>
       <div className="tl-dashboard-shell">
-        <TopHeader query={query} setQuery={setQuery} />
+        <TopHeader onHome={() => setEntryStage("search")} />
         {DATA?.evidenceOnly ? <EvidencePreview liveRefreshState={liveRefreshState} /> : <DashboardView publicDemo={PUBLIC_DEMO} store={store} setStore={setStore} reviewsById={reviewsById} liveRefreshState={liveRefreshState} liveRefreshMessage={liveRefreshMessage} liveStage={liveStage} onRefreshData={refreshDashboard} onExtendWindow={(days) => startAnalysis(activeSlug, { windowDays: days })} />}
-        <CompanyBattleCard publicDemo={PUBLIC_DEMO} activeSlug={activeSlug} companies={runtimeCompanies} onCompanyReady={(slug, data) => setRuntimeCompanies((current) => ({ ...current, [slug]: data }))} />
       </div>
       {entryStage === "revealing" && <DashboardTransitionOverlay />}
     </div>

@@ -3,8 +3,8 @@ import { Search, ArrowRight, Database, ScanSearch, LayoutDashboard, Check, Shiel
 import { GOOGLE_PLAY_LOGO, APP_STORE_LOGO } from "./logos";
 import "./EntryFlow.css";
 
-const CORAL = "#F0714E";
-const INK = "#172033";
+const CORAL = "#072D59";
+const INK = "#072D59";
 const INK2 = "#34445C";
 
 function companyEntries(companies) {
@@ -28,13 +28,13 @@ function SignalField({ engaged = false, loading = false }) {
       viewBox="0 0 1000 650"
       preserveAspectRatio="none"
     >
-      <path d="M-80 385 C110 330 225 430 390 350 S700 245 1080 355" fill="none" stroke="#F0714E" strokeWidth="1.15" opacity={loading ? ".62" : ".38"} className="tl-signal-path" />
-      <path d="M-40 270 C170 330 300 225 490 300 S760 410 1060 285" fill="none" stroke="#172033" strokeWidth=".7" opacity=".055" />
-      <path d="M80 515 C280 445 390 540 585 470 S835 425 1040 490" fill="none" stroke="#172033" strokeWidth=".65" opacity=".04" />
+      <path d="M-80 385 C110 330 225 430 390 350 S700 245 1080 355" fill="none" stroke="#072D59" strokeWidth="1.15" opacity={loading ? ".62" : ".38"} className="tl-signal-path" />
+      <path d="M-40 270 C170 330 300 225 490 300 S760 410 1060 285" fill="none" stroke="#072D59" strokeWidth=".7" opacity=".055" />
+      <path d="M80 515 C280 445 390 540 585 470 S835 425 1040 490" fill="none" stroke="#072D59" strokeWidth=".65" opacity=".04" />
       {fragments.map(([x,y,w], i) => (
         <g key={i} className={i % 2 ? "tl-fragment-a" : "tl-fragment-b"} style={{ transformOrigin: `${x}% ${y}%` }}>
-          <line x1={x*10} y1={y*6.5} x2={x*10+w} y2={y*6.5} stroke="#172033" strokeWidth="1" opacity=".28" />
-          {i % 3 === 0 ? <circle cx={x*10+w+8} cy={y*6.5} r="1.7" fill="#F0714E" opacity=".42" /> : null}
+          <line x1={x*10} y1={y*6.5} x2={x*10+w} y2={y*6.5} stroke="#072D59" strokeWidth="1" opacity=".28" />
+          {i % 3 === 0 ? <circle cx={x*10+w+8} cy={y*6.5} r="1.7" fill="#072D59" opacity=".42" /> : null}
         </g>
       ))}
     </svg>
@@ -157,7 +157,7 @@ function SignatureSignalLoader({ company, activeStep = 0, elapsedSeconds = 0, re
       <div className="tl-reference-brand">Throughline</div>
       <ReferenceSignalGraphic snippets={reviewSnippets} />
       <section className="tl-reference-copy">
-        <h1>Building Throughline for <em>{company}</em></h1>
+        <h1>{demoMode ? "Opening insights for " : "Building Throughline for "}<em>{company}</em></h1>
         <p>Turning customer voices into clear direction.</p>
       </section>
       <div className="tl-reference-milestones">
@@ -229,20 +229,11 @@ export function SearchPage({ companies, onSelectCompany, demoMode = false }) {
   const entries = useMemo(() => companyEntries(companies), [companies]);
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
-  const [suggestionPage, setSuggestionPage] = useState(0);
-  const [suggestionsPaused, setSuggestionsPaused] = useState(false);
   const normalized = query.trim().toLowerCase();
   const suggestions = normalized
     ? entries.filter((entry) => entry.label.toLowerCase().includes(normalized))
     : entries;
-  const suggestionCount = Math.min(4, entries.length);
-  const visibleSuggestions = Array.from({ length: suggestionCount }, (_, offset) => entries[(suggestionPage + offset) % entries.length]).filter(Boolean);
-
-  useEffect(() => {
-    if (suggestionsPaused || entries.length <= suggestionCount) return undefined;
-    const timer = window.setInterval(() => setSuggestionPage((page) => (page + suggestionCount) % entries.length), 5000);
-    return () => window.clearInterval(timer);
-  }, [entries.length, suggestionCount, suggestionsPaused]);
+  const visibleSuggestions = suggestions;
 
   const submit = (event) => {
     event.preventDefault();
@@ -270,28 +261,28 @@ export function SearchPage({ companies, onSelectCompany, demoMode = false }) {
 
   return (
     <div className="tl-search-reference min-h-screen font-sans text-slate-900 antialiased">
-      <header className="tl-search-reference-header"><strong>Throughline</strong>{demoMode && <span className="tl-demo-label">Portfolio demo · v2</span>}</header>
+      <header className="tl-search-reference-header"><strong>Throughline</strong>{demoMode && <span className="tl-demo-label">Portfolio demo</span>}</header>
       <main className="tl-search-reference-main">
         <ReferenceSignalGraphic compact />
         <section className="tl-search-reference-copy">
           <h1>Find the signal in customer feedback</h1>
-          <p>Search a company. Throughline turns recent public customer voices into clear direction.</p>
+          <p>Explore customer feedback, find the priorities, and see the evidence behind every recommendation.</p>
         </section>
         <form onSubmit={submit} className="tl-search-reference-form">
           <div className={`tl-search-reference-box ${query ? "has-query" : ""}`}>
             <Search size={20} strokeWidth={1.8}/>
-            <input autoFocus value={query} onChange={(event)=>{setQuery(event.target.value);setError("");}} placeholder="Search a company" aria-label="Search a company"/>
+            <input autoFocus value={query} onChange={(event)=>{setQuery(event.target.value);setError("");}} placeholder="Choose a company" aria-label="Search a company"/>
             <button type="submit">{demoMode ? "Open demo" : "Analyze"} <ArrowRight size={16}/></button>
           </div>
           {error ? <p className="tl-search-reference-error">{error}</p> : null}
         </form>
-        <div className="tl-search-reference-try" onMouseEnter={()=>setSuggestionsPaused(true)} onMouseLeave={()=>setSuggestionsPaused(false)}>
-          <span>{demoMode ? "Available" : "Try"}</span>
-          <div key={suggestionPage} className="tl-search-suggestion-roll">
+        <div className="tl-search-reference-try">
+          <span>{demoMode ? "Explore a demo" : "Try"}</span>
+          <div className="tl-search-suggestion-roll">
             {visibleSuggestions.map((entry, index)=><button key={entry.slug} style={{"--tl-company-delay":`${index * 55}ms`}} type="button" onClick={()=>choose(entry.slug)}>{entry.label}</button>)}
           </div>
         </div>
-        <div className="tl-search-reference-trust"><ShieldCheck size={15}/><span>{demoMode ? "Cached demonstration data · no credentials required" : "Secure · Private · Compliant"}</span></div>
+        <div className="tl-search-reference-trust"><ShieldCheck size={15}/><span>{demoMode ? "Cached app-store analysis · no sign-in needed" : "Secure · Private · Compliant"}</span></div>
       </main>
     </div>
   );
@@ -350,7 +341,7 @@ export function AnalysisLoading({ company, data, ready = false, error = "", onCo
       : "Still working · this source match is taking longer than usual";
 
   return (
-    <div className="tl-loading-experience relative min-h-screen overflow-hidden bg-[#FBF7F6] font-sans text-slate-900 antialiased">
+    <div className="tl-loading-experience relative min-h-screen overflow-hidden bg-[#F5F9FC] font-sans text-slate-900 antialiased">
       <SignatureSignalLoader
         company={company}
         activeStep={activeStep}
@@ -363,8 +354,8 @@ export function AnalysisLoading({ company, data, ready = false, error = "", onCo
       {error ? (
         <section className="tl-loading-error tl-signature-error" aria-live="assertive">
           <p className="text-sm font-semibold text-red-700">Live analysis couldn’t complete</p>
-          <p className="mt-2 text-sm leading-6 text-[#4B403C]">{error}</p>
-          <button type="button" onClick={onBack} className="mt-5 rounded-lg border border-[#D2CECB] bg-white px-4 py-2 text-sm font-semibold text-[#172033] hover:bg-[#FBF7F6]">Back to search</button>
+          <p className="mt-2 text-sm leading-6 text-[#38516B]">{error}</p>
+          <button type="button" onClick={onBack} className="mt-5 rounded-lg border border-[#D2CECB] bg-white px-4 py-2 text-sm font-semibold text-[#072D59] hover:bg-[#F5F9FC]">Back to search</button>
         </section>
       ) : null}
     </div>
@@ -377,7 +368,7 @@ export function DashboardTransitionOverlay() {
     <div className="tl-transition-overlay pointer-events-none fixed inset-0 z-[100] overflow-hidden">
       <div className="tl-transition-wash absolute inset-0" />
       <svg aria-hidden="true" className="absolute inset-0 h-full w-full" viewBox="0 0 1000 650" preserveAspectRatio="none">
-        <path d="M-90 380 C120 315 260 430 420 340 S735 245 1090 350" fill="none" stroke="#F0714E" strokeWidth="1.45" opacity=".7" />
+        <path d="M-90 380 C120 315 260 430 420 340 S735 245 1090 350" fill="none" stroke="#072D59" strokeWidth="1.45" opacity=".7" />
       </svg>
     </div>
   );
