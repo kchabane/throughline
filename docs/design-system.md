@@ -1,6 +1,6 @@
 # Throughline interface
 
-The interface uses a calm analytical workspace with findings and actions before the evidence drill-down.
+The interface uses a calm analytical workspace with evidence followed by an explicit summary-generation step.
 
 ## Brand palette
 
@@ -24,11 +24,11 @@ These are interface interpretation thresholds, not external performance benchmar
 ## Demo and evidence behavior
 
 - Company choices stay visible and filter as the visitor types.
-- Cached findings and recommendations are visible without an artificial generation step.
+- Generate insights & actions reveals the cached summary and recommendations in the public demo, with no live model call.
 - Snapshot dates describe the reviews actually present.
 - Replay is explicitly a demo; it does not collect new reviews.
 - Customer evidence is labeled as paraphrased and does not use direct quotation marks.
 - Evidence advances only when the reader chooses it.
-- Compare is part of the header. Its dialog supports Escape, focus containment and focus restoration.
+- Compare uses the original floating right-edge tab. Its dialog supports Escape, focus containment and focus restoration.
 - Theme rows become stacked items on narrow screens, preserving the same evidence controls.
 - Reduced-motion preferences disable ornamental transitions.

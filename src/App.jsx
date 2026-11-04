@@ -610,7 +610,6 @@ function Sidebar({ view, setView }) {
    ------------------------------------------------------------------ */
 
 function TopHeader({ onHome }) {
-  const { activeSlug, companies, setRuntimeCompanies } = useAppData();
   return (
     <header className="tl-app-header">
       <div className="tl-header-inner">
@@ -619,8 +618,6 @@ function TopHeader({ onHome }) {
         </button>
         <div className="tl-header-company"><CompanySwitcher compact /></div>
         <span className="tl-demo-badge">Demo data</span>
-        <CompanyBattleCard publicDemo={PUBLIC_DEMO} activeSlug={activeSlug} companies={companies}
-          onCompanyReady={(slug, data) => setRuntimeCompanies((current) => ({ ...current, [slug]: data }))} />
       </div>
     </header>
   );
@@ -2331,15 +2328,15 @@ function InsightGenerator({ state, onGenerate, reviewCount, publicDemo = false }
   return (
     <Card className={`relative z-20 overflow-visible transition-colors duration-500 ${generating ? "border-[#072D59]/50 bg-[#EEF6FC]" : "bg-[#F5F9FC]"}`}>
       <div className="flex flex-col items-center justify-center px-6 py-7 text-center">
-        <div className="flex items-center gap-2"><button type="button" onClick={onGenerate} disabled={generating}
-          className={`group inline-flex min-w-[230px] items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold shadow-sm transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-[#072D59]/25 ${ready || generating ? "bg-[#072D59] text-white" : "bg-[#DED8D4] text-[#554B46] hover:bg-[#D2CAC5]"}`}>
+        <div className="flex flex-wrap items-center justify-center gap-2"><button type="button" onClick={onGenerate} disabled={generating}
+          className={`group inline-flex min-w-0 sm:min-w-[230px] items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold shadow-sm transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-[#072D59]/25 bg-[#072D59] text-white hover:bg-[#123F70]`}>
           <Sparkles size={17} className={generating ? "animate-pulse" : "transition-transform group-hover:rotate-6"} />
           {generating ? "Generating insights…" : ready ? "Regenerate insights & actions" : failed ? "Try generating again" : "Generate insights & actions"}
-        </button><InfoPopover label="How insight generation works"><strong className="block text-[11px]">What happens when you generate</strong><span className="mt-1 block text-slate-300">Throughline sends the analyzed themes and supporting evidence for synthesis into an executive summary and ranked actions. This is the credit-using step; review collection and the core dashboard are already complete.</span></InfoPopover></div>
+        </button><InfoPopover label="How insight generation works"><strong className="block text-[11px]">What happens when you generate</strong><span className="mt-1 block text-slate-300">{publicDemo ? "This demo reveals a cached executive summary and ranked actions from the company analysis. No live model is called and no credits are used." : "Throughline sends the analyzed themes and supporting evidence for synthesis into an executive summary and ranked actions. This step uses AI credits."}</span></InfoPopover></div>
         {generating ? (
           <div className="mt-4 w-full max-w-xl" role="status" aria-live="polite">
             <div className="tl-generate-track"><span /></div>
-            <div className="mt-2 text-xs font-medium text-[#7B655D]">Synthesizing {reviewCount} reviews into findings and ranked actions</div>
+            <div className="mt-2 text-xs font-medium text-[#7B655D]">{publicDemo ? "Preparing the cached summary and ranked actions…" : `Synthesizing ${reviewCount} reviews into findings and ranked actions`}</div>
           </div>
         ) : (
           <p className={`mt-2 text-xs ${failed ? "text-red-600" : "text-[#60758B]"}`}>{failed ? "Insight generation did not complete. Your evidence remains available and no result was replaced." : publicDemo ? "Portfolio demo uses a cached synthesis and does not call a live model." : "Uses AI credits to create an executive summary and prioritized recommendations."}</p>
@@ -2371,16 +2368,20 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
   const [activeStepIdx, setActiveStepIdx] = useState(null); // action drawer selection
   const [showValidation, setShowValidation] = useState(false); // full-width detailed validation
   const [activeWeek, setActiveWeek] = useState(null);
-  const [insightState, setInsightState] = useState(DATA?.narrative ? "ready" : "idle");
+  const [insightState, setInsightState] = useState(publicDemo ? "idle" : DATA?.narrative ? "ready" : "idle");
   useEffect(() => { setShowValidation(false); }, [store]); // reset when scope changes
   useEffect(() => { setActiveTopic(null); }, [store]); // topics differ per scope
   useEffect(() => { setActiveWeek(null); }, [store]);
   useEffect(() => { setActiveTopic(null); }, [activeWeek]);
-  useEffect(() => { setInsightState(DATA?.narrative ? "ready" : "idle"); }, [activeSlug, DATA?.narrative, publicDemo]);
+  const demoInsightTimer = useRef(null);
+  useEffect(() => {
+    setInsightState(publicDemo ? "idle" : DATA?.narrative ? "ready" : "idle");
+    return () => window.clearTimeout(demoInsightTimer.current);
+  }, [activeSlug, DATA?.narrative, publicDemo]);
   const generateInsights = async () => {
     setInsightState("generating");
     if (publicDemo) {
-      window.setTimeout(() => setInsightState("ready"), 1350);
+      demoInsightTimer.current = window.setTimeout(() => setInsightState("ready"), 1350);
       return;
     }
     try {
@@ -2473,21 +2474,6 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
       </div>
 
       <div className="tl-reveal-section mt-3">{showResolvedKpis ? <KpiRow slice={displaySlice} store={store} /> : <KpiLoadingRow slice={displaySlice} />}</div>
-      {/* Lower dashboard as one narrative, two rows:
-          Row 1 — what we found (Key Findings) → what to do (Next Steps).
-          Row 2 — what evidence explains it (Platform & Emotion) → why we
-          trust it (Model Validation). Both rows are the same 50/50 grid so
-          their outer edges line up and the four cards read as one section. */}
-      {showResolvedBody && insightState === "ready" && showSteps ? (
-        <div className="tl-reveal-section mt-4 grid grid-cols-1 items-stretch gap-4 lg:grid-cols-2">
-          <KeyFindings slice={displaySlice} />
-          <NextSteps onSelect={setActiveStepIdx} activeIdx={activeStepIdx} store={store} />
-        </div>
-      ) : showResolvedBody && insightState === "ready" ? (
-        <div className="tl-reveal-section mt-4"><KeyFindings slice={displaySlice} /></div>
-      ) : null}
-
-
       <div className="tl-reveal-section mt-3">{showResolvedChart ? <WeeklyPulse key={store} weeks={slice.weekly || []} activeWeek={activeWeek} onSelectWeek={setActiveWeek} /> : <WeeklyPulseLoading />}</div>
 
       {/* Matrix left and dominant (70%), Customer Voice right (30%). items-stretch
@@ -2505,7 +2491,22 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
         </div>
       </div>}
 
-      {!publicDemo && showResolvedBody && <div className="tl-reveal-section mt-4"><InsightGenerator publicDemo={publicDemo} state={insightState} onGenerate={generateInsights} reviewCount={displaySlice.kpis.nReviews} /></div>}
+      {showResolvedBody && <div className="tl-reveal-section mt-4"><InsightGenerator publicDemo={publicDemo} state={insightState} onGenerate={generateInsights} reviewCount={displaySlice.kpis.nReviews} /></div>}
+
+      {/* Lower dashboard as one narrative, two rows:
+          Row 1 — what we found (Key Findings) → what to do (Next Steps).
+          Row 2 — what evidence explains it (Platform & Emotion) → why we
+          trust it (Model Validation). Both rows are the same 50/50 grid so
+          their outer edges line up and the four cards read as one section. */}
+      {showResolvedBody && insightState === "ready" && showSteps ? (
+        <div className="tl-reveal-section mt-4 grid grid-cols-1 items-stretch gap-4 lg:grid-cols-2">
+          <KeyFindings slice={displaySlice} />
+          <NextSteps onSelect={setActiveStepIdx} activeIdx={activeStepIdx} store={store} />
+        </div>
+      ) : showResolvedBody && insightState === "ready" ? (
+        <div className="tl-reveal-section mt-4"><KeyFindings slice={displaySlice} /></div>
+      ) : null}
+
 
       {/* Analytical drill-down expands IN PLACE: clicking "View detailed
           validation" swaps this row for a full-width Trust panel (Evidence
@@ -2938,6 +2939,8 @@ export default function App() {
     <div className={`${entryStage === "revealing" ? "tl-dashboard-reveal " : ""}min-h-screen bg-[#F5F9FC] font-sans text-[#072D59] antialiased`}>
       <div className="tl-dashboard-shell">
         <TopHeader onHome={() => setEntryStage("search")} />
+        <CompanyBattleCard publicDemo={PUBLIC_DEMO} activeSlug={activeSlug} companies={runtimeCompanies}
+          onCompanyReady={(slug, data) => setRuntimeCompanies((current) => ({ ...current, [slug]: data }))} />
         {DATA?.evidenceOnly ? <EvidencePreview liveRefreshState={liveRefreshState} /> : <DashboardView publicDemo={PUBLIC_DEMO} store={store} setStore={setStore} reviewsById={reviewsById} liveRefreshState={liveRefreshState} liveRefreshMessage={liveRefreshMessage} liveStage={liveStage} onRefreshData={refreshDashboard} onExtendWindow={(days) => startAnalysis(activeSlug, { windowDays: days })} />}
       </div>
       {entryStage === "revealing" && <DashboardTransitionOverlay />}

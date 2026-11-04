@@ -728,10 +728,15 @@ export default function CompanyBattleCard({ activeSlug, companies, onCompanyRead
       <button
         type="button"
         onClick={openSetup}
-        className="tl-compare-button"
+        className="compare-intercept group fixed right-0 top-[42%] z-40 h-[124px] w-[54px] translate-x-[1px] overflow-hidden rounded-l-2xl border border-r-0 border-[#D2C7C1] bg-[#FFFFFF]/97 text-[#072D59] shadow-[-8px_10px_28px_rgba(23,32,51,0.10)] backdrop-blur-sm transition-[width,box-shadow,border-color] duration-300 hover:w-[176px] hover:border-[#C3B5AD] hover:shadow-[-12px_14px_34px_rgba(23,32,51,0.14)] focus:w-[176px] focus:border-[#FD6E88]/55 focus:outline-none focus:ring-2 focus:ring-[#FD6E88]/25"
         aria-label="Compare companies — open Company Battle Card"
       >
-        <CompareGlyph className="h-4 w-4" /><span>Compare</span>
+        <span className="compare-intercept-glyph absolute left-[13px] top-[18px] block shrink-0"><CompareGlyph className="h-7 w-7 text-[#072D59] transition-transform duration-300 group-hover:scale-110 group-focus:scale-110" /><span className="compare-intercept-spark" aria-hidden="true" /></span>
+        <span className="compare-intercept-idle absolute left-1/2 top-[76px] -translate-x-1/2 -rotate-90 whitespace-nowrap text-[11px] font-semibold tracking-[0.08em] transition-opacity duration-150 group-hover:opacity-0 group-focus:opacity-0">Compare</span>
+        <span className="compare-intercept-labels pointer-events-none absolute left-[57px] top-[42px] min-w-[106px] translate-x-2 opacity-0 transition-all duration-250 group-hover:translate-x-0 group-hover:opacity-100 group-focus:translate-x-0 group-focus:opacity-100">
+          <span className="block text-[15px] font-semibold leading-5 text-[#072D59]">Compare</span>
+          <span className="mt-0.5 block whitespace-nowrap text-[10px] leading-4 text-[#60758B]">Company battle card</span>
+        </span>
       </button>
 
       {open && createPortal(
