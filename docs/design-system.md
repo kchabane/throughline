@@ -31,7 +31,7 @@ These are interface interpretation thresholds, not external performance benchmar
 - Evidence advances only when the reader chooses it.
 - Compare uses the original floating right-edge tab. Its dialog supports Escape, focus containment and focus restoration.
 - Theme rows become stacked items on narrow screens, preserving the same evidence controls.
-- The signature animation uses curved strands with independent drift and timing, quiet traveling ink accents, and a gently breathing logo circle. Reduced-motion preferences disable motion.
+- The signature animation preserves the original paths, traveling signals, hub halos and timing, using the approved navy/pink palette. Reduced-motion preferences disable motion.
 
 ## Theme section
 
