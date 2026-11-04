@@ -31,3 +31,7 @@ final result: passed
 ## Approved B integration
 
 The selected B motion is shared between the study, entry screen and loader via SignalGraphic. Browser verification confirmed 18 fine tracks, eight moving strokes, the tl-flow-arrival animation and a stationary logo. The page fits the browser viewport. Screenshot: ../previews/throughline-approved-b-homepage.png. Production build and whitespace checks passed. Not published.
+
+## Homepage animation restored
+
+Following user review, the B integration was reverted in EntryFlow. The homepage and loader again use the exact ReferenceSignalGraphic implementation from before integration; the isolated study is preserved. Other product changes are unchanged.
