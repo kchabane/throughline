@@ -2474,6 +2474,8 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
       </div>
 
       <div className="tl-reveal-section mt-3">{showResolvedKpis ? <KpiRow slice={displaySlice} store={store} /> : <KpiLoadingRow slice={displaySlice} />}</div>
+      <div className="tl-reveal-section mt-3">{showResolvedChart ? <WeeklyPulse key={store} weeks={slice.weekly || []} activeWeek={activeWeek} onSelectWeek={setActiveWeek} /> : <WeeklyPulseLoading />}</div>
+
       {showResolvedBody && <div className="tl-reveal-section mt-4"><InsightGenerator publicDemo={publicDemo} state={insightState} onGenerate={generateInsights} reviewCount={DATA.scopes.all.kpis.nReviews} /></div>}
 
       {/* Lower dashboard as one narrative, two rows:
@@ -2491,7 +2493,6 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
       ) : null}
 
 
-      <div className="tl-reveal-section mt-3">{showResolvedChart ? <WeeklyPulse key={store} weeks={slice.weekly || []} activeWeek={activeWeek} onSelectWeek={setActiveWeek} /> : <WeeklyPulseLoading />}</div>
 
       {/* Matrix left and dominant (70%), Customer Voice right (30%). items-stretch
           so both cards are the same height — tops AND bottoms aligned — reading

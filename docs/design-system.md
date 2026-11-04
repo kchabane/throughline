@@ -24,7 +24,7 @@ These are interface interpretation thresholds, not external performance benchmar
 ## Demo and evidence behavior
 
 - Company choices stay visible and filter as the visitor types.
-- Generate insights & actions sits below the KPI cards. Clicking it shows a preparation state, then reveals findings and ranked actions directly below. The public demo clearly labels this as cached analysis with no live model call.
+- Weekly pulse sits directly below the KPI cards, followed by Generate insights & actions. Clicking it shows a preparation state, then reveals findings and ranked actions directly below. The public demo clearly labels this as cached analysis with no live model call.
 - Snapshot dates describe the reviews actually present.
 - Replay is explicitly a demo; it does not collect new reviews.
 - Customer evidence is labeled as paraphrased and does not use direct quotation marks.
