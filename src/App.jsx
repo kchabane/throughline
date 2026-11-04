@@ -2368,14 +2368,14 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
   const [activeStepIdx, setActiveStepIdx] = useState(null); // action drawer selection
   const [showValidation, setShowValidation] = useState(false); // full-width detailed validation
   const [activeWeek, setActiveWeek] = useState(null);
-  const [insightState, setInsightState] = useState(DATA?.narrative ? "ready" : "idle");
+  const [insightState, setInsightState] = useState(publicDemo ? "idle" : DATA?.narrative ? "ready" : "idle");
   useEffect(() => { setShowValidation(false); }, [store]); // reset when scope changes
   useEffect(() => { setActiveTopic(null); }, [store]); // topics differ per scope
   useEffect(() => { setActiveWeek(null); }, [store]);
   useEffect(() => { setActiveTopic(null); }, [activeWeek]);
   const demoInsightTimer = useRef(null);
   useEffect(() => {
-    setInsightState(DATA?.narrative ? "ready" : "idle");
+    setInsightState(publicDemo ? "idle" : DATA?.narrative ? "ready" : "idle");
     return () => window.clearTimeout(demoInsightTimer.current);
   }, [activeSlug, DATA?.narrative, publicDemo]);
   const generateInsights = async () => {
@@ -2474,6 +2474,8 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
       </div>
 
       <div className="tl-reveal-section mt-3">{showResolvedKpis ? <KpiRow slice={displaySlice} store={store} /> : <KpiLoadingRow slice={displaySlice} />}</div>
+      {showResolvedBody && <div className="tl-reveal-section mt-4"><InsightGenerator publicDemo={publicDemo} state={insightState} onGenerate={generateInsights} reviewCount={DATA.scopes.all.kpis.nReviews} /></div>}
+
       {/* Lower dashboard as one narrative, two rows:
           Row 1 — what we found (Key Findings) → what to do (Next Steps).
           Row 2 — what evidence explains it (Platform & Emotion) → why we
@@ -2506,7 +2508,6 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
         </div>
       </div>}
 
-      {!publicDemo && showResolvedBody && <div className="tl-reveal-section mt-4"><InsightGenerator publicDemo={publicDemo} state={insightState} onGenerate={generateInsights} reviewCount={displaySlice.kpis.nReviews} /></div>}
 
       {/* Analytical drill-down expands IN PLACE: clicking "View detailed
           validation" swaps this row for a full-width Trust panel (Evidence
