@@ -112,23 +112,21 @@ function ReferenceSignalGraphic({ compact = false, snippets = [] }) {
   return (
     <div className={`tl-ref-signal ${compact ? "is-compact" : ""}`} aria-hidden="true">
       <svg viewBox="0 0 1440 310" preserveAspectRatio="none" className="tl-ref-signal-svg">
-        <g className="tl-ref-incoming-base">
-          {incoming.map((d,i)=><path key={i} d={d} className={`rp rp-${i+1}`}/>)}
-        </g>
-        <g className="tl-ref-incoming-motion">
-          {signalPaths.map((d, i) => (
-            <g key={i} style={{ "--signal-delay": `${(i % 4) * .14}s` }}>
+        {signalPaths.map((d, i) => (
+          <g key={i} className="tl-signal-lane" style={{ "--signal-delay": `${(i % 4) * .14}s`, "--drift-delay": `${i * -.63}s` }}>
+            <g className="tl-ref-incoming-base"><path d={incoming[i]} className={`rp rp-${i + 1}`} /></g>
+            <g className="tl-ref-converge"><path d={converge[i]} className={`rc rc-${i + 1}`} /></g>
+            <g className="tl-ref-incoming-motion">
               <path d={d} pathLength="100" className={`tl-signal-trail signal-${i % 3}`} />
               <path d={d} pathLength="100" className={`tl-signal-packet signal-${i % 3}`} />
             </g>
-          ))}
+          </g>
+        ))}
+        <g className="tl-signal-output-lane">
+          <path className="tl-ref-output" d="M754 156 C858 149 970 166 1088 163 C1202 160 1314 162 1448 162" />
+          <path className="tl-signal-output-glow" pathLength="100" d="M754 156 C858 149 970 166 1088 163 C1202 160 1314 162 1448 162" />
+          <path className="tl-ref-output-pulse" pathLength="100" d="M754 156 C858 149 970 166 1088 163 C1202 160 1314 162 1448 162" />
         </g>
-        <g className="tl-ref-converge">
-          {converge.map((d,i)=><path key={i} d={d} className={`rc rc-${i+1}`}/>)}
-        </g>
-        <path className="tl-ref-output" d="M754 156 C858 149 970 166 1088 163 C1202 160 1314 162 1448 162" />
-        <path className="tl-signal-output-glow" pathLength="100" d="M754 156 C858 149 970 166 1088 163 C1202 160 1314 162 1448 162" />
-        <path className="tl-ref-output-pulse" pathLength="100" d="M754 156 C858 149 970 166 1088 163 C1202 160 1314 162 1448 162" />
         <g className="tl-ref-ticks">
           {[1088,1198,1302,1392].map((x,i)=><line key={i} x1={x-4} y1="163" x2={x+4} y2="163"/>)}
         </g>

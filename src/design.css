@@ -203,8 +203,12 @@ button:disabled { cursor: wait; }
   99%,100% { stroke-dashoffset: -105; opacity: 0; }
 }
 @keyframes tl-signal-resolve {
-  0%,32%,78%,100% { box-shadow: 0 12px 34px #072d5914,inset 0 1px 0 white; }
-  48% { box-shadow: 0 8px 38px #072d5920,0 0 38px #fd6e8833,inset 0 1px 0 white; }
+  0%,32%,76%,100% { transform: translate(-50%,-50%) scale(1); box-shadow: 0 12px 34px #072d5914,inset 0 1px 0 white; }
+  39% { transform: translate(-50%,-50%) scale(.96); }
+  47% { transform: translate(-50%,-50%) scale(1.16); box-shadow: 0 10px 40px #072d5928,0 0 48px #fd6e8844,inset 0 1px 0 white; }
+  53% { transform: translate(-50%,-50%) scale(.99); }
+  59% { transform: translate(-50%,-50%) scale(1.08); box-shadow: 0 10px 32px #072d5918,0 0 28px #fd6e8828; }
+  68% { transform: translate(-50%,-50%) scale(1); }
 }
 @keyframes tl-signal-mark {
   0%,32%,72%,100% { transform: scale(1); }
@@ -225,4 +229,30 @@ button:disabled { cursor: wait; }
 @media (prefers-reduced-motion: reduce) {
   .tl-signal-trail, .tl-signal-packet, .tl-signal-output-glow, .tl-signal-orbit { display: none; }
   .tl-ref-hub, .tl-ref-hub-mark, .tl-ref-halo { animation: none; }
+}
+
+/* Keep each signal attached to its drifting lane, with the hub as its anchor. */
+.tl-signal-lane { transform-box: view-box; transform-origin: 682px 156px; animation: tl-signal-drift 8s var(--drift-delay) ease-in-out infinite; }
+.tl-signal-lane .tl-ref-incoming-base .rp { stroke: #adc8dc; opacity: .42; }
+.tl-signal-lane .tl-ref-converge .rc { stroke: #9fbcd2; opacity: .38; }
+.tl-signal-lane:nth-child(3n+1) .rp { stroke: #fd6e88; opacity: .28; }
+.tl-signal-lane:nth-child(3n+1) .rc { stroke: #fd6e88; opacity: .3; }
+.tl-signal-output-lane { transform-box: view-box; transform-origin: 754px 156px; animation: tl-output-drift 9s ease-in-out infinite; }
+.tl-ref-hub-mark b { animation: tl-logo-ring-pump var(--signal-cycle) ease-in-out infinite; }
+@keyframes tl-signal-drift {
+  0%,100% { transform: rotate(-.6deg) scaleY(.97); }
+  50% { transform: rotate(.6deg) scaleY(1.04); }
+}
+@keyframes tl-output-drift {
+  0%,100% { transform: rotate(-.35deg) scaleY(.85); }
+  50% { transform: rotate(.35deg) scaleY(1.35); }
+}
+@keyframes tl-logo-ring-pump {
+  0%,34%,76%,100% { transform: scale(1); }
+  46% { transform: scale(1.32); }
+  53% { transform: scale(.95); }
+  60% { transform: scale(1.15); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tl-signal-lane, .tl-signal-output-lane, .tl-ref-hub-mark b { animation: none; transform: none; }
 }
