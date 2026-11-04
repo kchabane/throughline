@@ -166,93 +166,52 @@ button:disabled { cursor: wait; }
 .tl-theme-instruction { flex-basis: 100%; color: var(--tl-muted); font-size: 12px; line-height: 1.6; }
 .tl-theme-filters { flex-basis: 100%; margin-left: 0; }
 
-/* Signature signal: gather → resolve → transmit, in one six-second cycle. */
-.tl-ref-signal { --signal-cycle: 6s; isolation: isolate; }
-.tl-ref-signal::before { content: ""; position: absolute; inset: 6% 12%; z-index: -1; background: radial-gradient(ellipse at 50% 50%,#dbf2fc99,transparent 48%),radial-gradient(ellipse at 70% 50%,#fd6e8810,transparent 44%); pointer-events: none; }
-.tl-ref-incoming-base .rp { stroke: #adc8dc; opacity: .42; }
-.tl-ref-incoming-base .rp:nth-child(3n+1) { stroke: #fd6e88; opacity: .28; }
-.tl-ref-converge .rc { animation: none; stroke: #9fbcd2; opacity: .38; }
-.tl-ref-converge .rc:nth-child(3n+1) { stroke: #fd6e88; opacity: .3; }
-.tl-signal-trail, .tl-signal-packet { fill: none; stroke-linecap: round; stroke: var(--tl-navy); stroke-dasharray: 7 100; animation: tl-signal-gather var(--signal-cycle) var(--signal-delay) linear infinite; }
-.tl-signal-trail { stroke-width: 5px; filter: blur(3px); opacity: 0; }
-.tl-signal-packet { stroke-width: 1.8px; opacity: 0; stroke-dasharray: 1.2 105; }
-.tl-signal-trail.signal-1, .tl-signal-packet.signal-1 { stroke: var(--tl-pink); }
-.tl-signal-trail.signal-2, .tl-signal-packet.signal-2 { stroke: #609bc3; }
-.tl-ref-output { stroke: var(--tl-pink); stroke-width: 1.4; opacity: .55; }
-.tl-ref-output-pulse, .tl-signal-output-glow { stroke: var(--tl-pink); stroke-dasharray: 12 110; stroke-width: 2.8; animation: tl-signal-transmit var(--signal-cycle) linear infinite; opacity: 0; }
-.tl-signal-output-glow { fill: none; stroke-width: 9px; filter: blur(5px); }
-.tl-ref-hub { border: 1px solid #fff; background: linear-gradient(145deg,#ffffff,#f2f9ff); box-shadow: 0 12px 34px #072d5914,inset 0 1px 0 white; animation: tl-signal-resolve var(--signal-cycle) ease-in-out infinite; }
-.tl-ref-hub-mark { animation: tl-signal-mark var(--signal-cycle) ease-in-out infinite; }
-.tl-ref-hub::before { border-color: #b4d4e9; }
-.tl-ref-hub::after { border-color: #c9dfec88; }
-.tl-signal-orbit { position: absolute; inset: -10px; border-radius: 50%; border: 1.5px solid transparent; border-top-color: #fd6e8899; border-right-color: #609bc355; animation: tl-signal-orbit 12s linear infinite; pointer-events: none; }
-.tl-ref-halo { border-color: #fd6e8877; animation: tl-signal-release var(--signal-cycle) ease-out infinite; }
-.tl-ref-halo.h2 { animation-delay: .4s; border-color: #609bc366; }
-@keyframes tl-signal-gather {
-  0% { stroke-dashoffset: 8; opacity: 0; }
-  5% { opacity: 0; }
-  10% { opacity: .7; }
-  38% { opacity: .9; }
-  50% { stroke-dashoffset: -102; opacity: 0; }
-  100% { stroke-dashoffset: -102; opacity: 0; }
+/* Signature motion: loosely drifting strands and a quiet, breathing centre. */
+.tl-ref-signal { isolation: isolate; }
+.tl-ref-incoming-base .rp, .tl-ref-converge .rc { fill: none; stroke: #8eafc5; stroke-width: .8; opacity: .3; animation: none; }
+.tl-signal-lane .tl-ref-incoming-base .rp, .tl-signal-lane .tl-ref-converge .rc { stroke: #8eafc5; opacity: .3; }
+.tl-signal-lane:nth-child(3n+1) .rp, .tl-signal-lane:nth-child(3n+1) .rc { stroke: #dc98a6; opacity: .36; }
+.tl-signal-lane { transform-box: view-box; transform-origin: 682px 156px; animation: tl-organic-drift var(--drift-duration) var(--drift-delay) ease-in-out infinite; }
+.tl-signal-trail, .tl-signal-output-glow { display: none; }
+.tl-signal-packet { fill: none; stroke: #658ba6; stroke-width: 1.15; stroke-linecap: round; stroke-dasharray: var(--ink-length) 120; animation: tl-organic-flow var(--flow-duration) var(--signal-delay) linear infinite; opacity: 0; }
+.tl-signal-packet.signal-1 { stroke: #df8ca1; }
+.tl-signal-packet.signal-2 { stroke: #89a7b9; stroke-width: .9; }
+.tl-ref-output { stroke: #d99aa8; stroke-width: 1; opacity: .55; }
+.tl-ref-output-pulse { stroke: #d88d9e; stroke-width: 1.4; stroke-dasharray: 24 125; animation: tl-organic-flow 14.7s -4.1s linear infinite; opacity: 0; }
+.tl-signal-output-lane { transform-box: view-box; transform-origin: 754px 156px; animation: tl-organic-out 17s -5s ease-in-out infinite; }
+.tl-ref-hub { border: 1px solid #ffffffcc; background: #ffffffed; box-shadow: 0 8px 22px #072d5909; animation: tl-organic-breathe 8.7s -2s ease-in-out infinite; }
+.tl-ref-hub::before, .tl-ref-hub::after { display: none; }
+.tl-ref-hub-mark { animation: none; }
+.tl-ref-hub-mark b { animation: tl-organic-ring 8.7s -2s ease-in-out infinite; }
+@keyframes tl-organic-drift {
+  0%,100% { transform: rotate(-.55deg) scaleY(.98); }
+  32% { transform: rotate(.35deg) scaleY(1.07); }
+  69% { transform: rotate(-.2deg) scaleY(.95); }
 }
-@keyframes tl-signal-transmit {
-  0%,48% { stroke-dashoffset: 14; opacity: 0; }
-  54% { opacity: .9; }
-  90% { opacity: .9; }
-  99%,100% { stroke-dashoffset: -105; opacity: 0; }
+@keyframes tl-organic-out {
+  0%,100% { transform: rotate(-.25deg) scaleY(.9); }
+  42% { transform: rotate(.3deg) scaleY(1.2); }
+  76% { transform: rotate(.05deg) scaleY(1.04); }
 }
-@keyframes tl-signal-resolve {
-  0%,32%,76%,100% { transform: translate(-50%,-50%) scale(1); box-shadow: 0 12px 34px #072d5914,inset 0 1px 0 white; }
-  39% { transform: translate(-50%,-50%) scale(.96); }
-  47% { transform: translate(-50%,-50%) scale(1.16); box-shadow: 0 10px 40px #072d5928,0 0 48px #fd6e8844,inset 0 1px 0 white; }
-  53% { transform: translate(-50%,-50%) scale(.99); }
-  59% { transform: translate(-50%,-50%) scale(1.08); box-shadow: 0 10px 32px #072d5918,0 0 28px #fd6e8828; }
-  68% { transform: translate(-50%,-50%) scale(1); }
+@keyframes tl-organic-flow {
+  0% { stroke-dashoffset: 26; opacity: 0; }
+  16% { opacity: .48; }
+  63% { opacity: .55; }
+  88% { opacity: .15; }
+  100% { stroke-dashoffset: -124; opacity: 0; }
 }
-@keyframes tl-signal-mark {
-  0%,32%,72%,100% { transform: scale(1); }
-  46% { transform: scale(1.16); }
-  56% { transform: scale(1); }
+@keyframes tl-organic-breathe {
+  0%,100% { transform: translate(-50%,-50%) scale(1); }
+  43% { transform: translate(-50%,-50%) scale(1.035); }
+  76% { transform: translate(-50%,-50%) scale(1.008); }
 }
-@keyframes tl-signal-release {
-  0%,44% { transform: scale(.96); opacity: 0; }
-  49% { opacity: .7; }
-  76%,100% { transform: scale(1.48); opacity: 0; }
-}
-@keyframes tl-signal-orbit { to { transform: rotate(360deg); } }
-@media (max-width:767px) {
-  .tl-signal-trail { stroke-width: 3px; filter: blur(2px); }
-  .tl-signal-packet { stroke-width: 1.5px; }
-  .tl-signal-output-glow { stroke-width: 5px; filter: blur(3px); }
+@keyframes tl-organic-ring {
+  0%,100% { transform: scale(1); }
+  43% { transform: scale(1.07); }
+  76% { transform: scale(1.015); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tl-signal-trail, .tl-signal-packet, .tl-signal-output-glow, .tl-signal-orbit { display: none; }
-  .tl-ref-hub, .tl-ref-hub-mark, .tl-ref-halo { animation: none; }
-}
-
-/* Keep each signal attached to its drifting lane, with the hub as its anchor. */
-.tl-signal-lane { transform-box: view-box; transform-origin: 682px 156px; animation: tl-signal-drift 8s var(--drift-delay) ease-in-out infinite; }
-.tl-signal-lane .tl-ref-incoming-base .rp { stroke: #adc8dc; opacity: .42; }
-.tl-signal-lane .tl-ref-converge .rc { stroke: #9fbcd2; opacity: .38; }
-.tl-signal-lane:nth-child(3n+1) .rp { stroke: #fd6e88; opacity: .28; }
-.tl-signal-lane:nth-child(3n+1) .rc { stroke: #fd6e88; opacity: .3; }
-.tl-signal-output-lane { transform-box: view-box; transform-origin: 754px 156px; animation: tl-output-drift 9s ease-in-out infinite; }
-.tl-ref-hub-mark b { animation: tl-logo-ring-pump var(--signal-cycle) ease-in-out infinite; }
-@keyframes tl-signal-drift {
-  0%,100% { transform: rotate(-.6deg) scaleY(.97); }
-  50% { transform: rotate(.6deg) scaleY(1.04); }
-}
-@keyframes tl-output-drift {
-  0%,100% { transform: rotate(-.35deg) scaleY(.85); }
-  50% { transform: rotate(.35deg) scaleY(1.35); }
-}
-@keyframes tl-logo-ring-pump {
-  0%,34%,76%,100% { transform: scale(1); }
-  46% { transform: scale(1.32); }
-  53% { transform: scale(.95); }
-  60% { transform: scale(1.15); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .tl-signal-lane, .tl-signal-output-lane, .tl-ref-hub-mark b { animation: none; transform: none; }
+  .tl-signal-packet, .tl-ref-output-pulse { display: none; }
+  .tl-signal-lane, .tl-signal-output-lane, .tl-ref-hub-mark, .tl-ref-hub-mark b { animation: none; transform: none; }
+  .tl-ref-hub { animation: none; transform: translate(-50%,-50%); }
 }

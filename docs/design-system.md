@@ -31,7 +31,7 @@ These are interface interpretation thresholds, not external performance benchmar
 - Evidence advances only when the reader chooses it.
 - Compare uses the original floating right-edge tab. Its dialog supports Escape, focus containment and focus restoration.
 - Theme rows become stacked items on narrow screens, preserving the same evidence controls.
-- The signature Throughline animation uses a coordinated six-second gather, resolve and transmit sequence: complete input paths, bright signal packets with soft trails, gently drifting lanes, a synchronized expanding logo circle, expanding halos and an output trace. Reduced-motion preferences disable motion.
+- The signature animation uses curved strands with independent drift and timing, quiet traveling ink accents, and a gently breathing logo circle. Reduced-motion preferences disable motion.
 
 ## Theme section
 
