@@ -1,0 +1,54 @@
+body { background: #f5f9fc; }
+.motion-study { max-width: 1440px; margin: 0 auto; padding: 56px 40px 32px; color: #072d59; font-family: Inter,sans-serif; }
+.motion-study-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 32px; margin-bottom: 64px; }
+.study-eyebrow { color: #60758b; font-size: 11px; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; margin: 0 0 12px; }
+.motion-study h1 { font-size: clamp(28px,3vw,40px); font-weight: 600; letter-spacing: -.035em; margin: 0 0 14px; line-height: 1.2; }
+.motion-study h2 { font-size: 24px; font-weight: 600; letter-spacing: -.025em; margin: 0 0 12px; }
+.motion-study p:not(.study-eyebrow) { color: #38516b; font-size: 14px; line-height: 1.65; margin: 0; }
+.study-controls { display: flex; flex-wrap: wrap; gap: 8px; flex-shrink: 0; }
+.study-controls button { padding: 10px 14px; min-height: 44px; border: 1px solid #c5d6e4; background: white; color: #072d59; border-radius: 8px; font-size: 13px; font-weight: 600; }
+.study-controls button:hover { background: #dbf2fc; }
+.study-comparison { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 40px; }
+.study-version { min-width: 0; padding-top: 24px; border-top: 1px solid #c5d6e4; }
+.study-version > p:not(.study-eyebrow) { min-height: 48px; max-width: 440px; }
+.study-version .tl-ref-signal { width: 100%; height: 240px; margin: 28px 0 20px; }
+.study-version .tl-ref-hub { width: 72px; height: 72px; }
+.study-version .tl-ref-hub-mark i { width: 10px; height: 2.5px; }
+.study-version .tl-ref-hub-mark b { width: 14px; height: 14px; border-width: 3px; margin: 0 3px; }
+/* A reproduces the original motion while sharing the approved clean circle. */
+.study-original .tl-ref-incoming-motion .rm { animation-name: tl-ref-travel; stroke-width: 1.4px; stroke: #072d59; }
+.study-original .tl-ref-incoming-motion .rm:nth-child(2n) { stroke: #34445c; }
+.study-original .tl-ref-output-pulse { animation-name: tl-ref-output-travel; stroke-width: 2.1px; }
+/* B reuses the exact source paths, extending the highlight through convergence. */
+.study-varied .tl-ref-incoming-motion .rm { animation: study-arrival var(--arrival-duration) var(--arrival-delay) linear infinite; stroke-dasharray: var(--arrival-length) 112; stroke-width: var(--arrival-width); stroke: #072d59; }
+.study-varied .tl-ref-incoming-motion .rm:nth-child(2n) { stroke: #427291; }
+.study-varied .tl-ref-incoming-motion .rm:nth-child(3n) { stroke: #de8196; }
+.study-varied .tl-ref-output-pulse { animation: study-release 6.3s -1.6s cubic-bezier(.16,.55,.45,1) infinite; stroke-width: 2px; stroke-dasharray: 7 112; }
+.study-footer { display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid #d5e1eb; margin-top: 28px; padding-top: 24px; color: #60758b; font-size: 12px; line-height: 1.6; }
+.study-footer a { color: #072d59; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.motion-study[data-paused="true"] *, .motion-study[data-paused="true"] *::before, .motion-study[data-paused="true"] *::after { animation-play-state: paused !important; }
+@keyframes study-arrival {
+  0% { stroke-dashoffset: 8; opacity: 0; }
+  14% { stroke-dashoffset: -2; opacity: .45; }
+  42% { stroke-dashoffset: -28; opacity: .75; }
+  71% { stroke-dashoffset: -72; opacity: .85; }
+  91% { stroke-dashoffset: -100; opacity: .15; }
+  100% { stroke-dashoffset: -111; opacity: 0; }
+}
+@keyframes study-release {
+  0% { stroke-dashoffset: 9; opacity: 0; }
+  12% { opacity: .75; }
+  70% { opacity: .65; }
+  100% { stroke-dashoffset: -112; opacity: 0; }
+}
+@media (max-width: 800px) {
+  .motion-study { padding: 28px 24px; }
+  .motion-study-header { flex-direction: column; gap: 24px; margin-bottom: 40px; }
+  .study-comparison { grid-template-columns: 1fr; gap: 24px; }
+  .study-version .tl-ref-signal { height: 180px; margin: 14px 0; }
+  .study-version > p:not(.study-eyebrow) { min-height: 0; }
+  .study-footer { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .study-varied .tl-ref-incoming-motion .rm, .study-varied .tl-ref-output-pulse { display: none; }
+}
