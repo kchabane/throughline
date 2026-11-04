@@ -2368,14 +2368,14 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
   const [activeStepIdx, setActiveStepIdx] = useState(null); // action drawer selection
   const [showValidation, setShowValidation] = useState(false); // full-width detailed validation
   const [activeWeek, setActiveWeek] = useState(null);
-  const [insightState, setInsightState] = useState(publicDemo ? "idle" : DATA?.narrative ? "ready" : "idle");
+  const [insightState, setInsightState] = useState(DATA?.narrative ? "ready" : "idle");
   useEffect(() => { setShowValidation(false); }, [store]); // reset when scope changes
   useEffect(() => { setActiveTopic(null); }, [store]); // topics differ per scope
   useEffect(() => { setActiveWeek(null); }, [store]);
   useEffect(() => { setActiveTopic(null); }, [activeWeek]);
   const demoInsightTimer = useRef(null);
   useEffect(() => {
-    setInsightState(publicDemo ? "idle" : DATA?.narrative ? "ready" : "idle");
+    setInsightState(DATA?.narrative ? "ready" : "idle");
     return () => window.clearTimeout(demoInsightTimer.current);
   }, [activeSlug, DATA?.narrative, publicDemo]);
   const generateInsights = async () => {
@@ -2474,6 +2474,21 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
       </div>
 
       <div className="tl-reveal-section mt-3">{showResolvedKpis ? <KpiRow slice={displaySlice} store={store} /> : <KpiLoadingRow slice={displaySlice} />}</div>
+      {/* Lower dashboard as one narrative, two rows:
+          Row 1 — what we found (Key Findings) → what to do (Next Steps).
+          Row 2 — what evidence explains it (Platform & Emotion) → why we
+          trust it (Model Validation). Both rows are the same 50/50 grid so
+          their outer edges line up and the four cards read as one section. */}
+      {showResolvedBody && insightState === "ready" && showSteps ? (
+        <div className="tl-reveal-section mt-4 grid grid-cols-1 items-stretch gap-4 lg:grid-cols-2">
+          <KeyFindings slice={displaySlice} />
+          <NextSteps onSelect={setActiveStepIdx} activeIdx={activeStepIdx} store={store} />
+        </div>
+      ) : showResolvedBody && insightState === "ready" ? (
+        <div className="tl-reveal-section mt-4"><KeyFindings slice={displaySlice} /></div>
+      ) : null}
+
+
       <div className="tl-reveal-section mt-3">{showResolvedChart ? <WeeklyPulse key={store} weeks={slice.weekly || []} activeWeek={activeWeek} onSelectWeek={setActiveWeek} /> : <WeeklyPulseLoading />}</div>
 
       {/* Matrix left and dominant (70%), Customer Voice right (30%). items-stretch
@@ -2491,22 +2506,7 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
         </div>
       </div>}
 
-      {showResolvedBody && <div className="tl-reveal-section mt-4"><InsightGenerator publicDemo={publicDemo} state={insightState} onGenerate={generateInsights} reviewCount={displaySlice.kpis.nReviews} /></div>}
-
-      {/* Lower dashboard as one narrative, two rows:
-          Row 1 — what we found (Key Findings) → what to do (Next Steps).
-          Row 2 — what evidence explains it (Platform & Emotion) → why we
-          trust it (Model Validation). Both rows are the same 50/50 grid so
-          their outer edges line up and the four cards read as one section. */}
-      {showResolvedBody && insightState === "ready" && showSteps ? (
-        <div className="tl-reveal-section mt-4 grid grid-cols-1 items-stretch gap-4 lg:grid-cols-2">
-          <KeyFindings slice={displaySlice} />
-          <NextSteps onSelect={setActiveStepIdx} activeIdx={activeStepIdx} store={store} />
-        </div>
-      ) : showResolvedBody && insightState === "ready" ? (
-        <div className="tl-reveal-section mt-4"><KeyFindings slice={displaySlice} /></div>
-      ) : null}
-
+      {!publicDemo && showResolvedBody && <div className="tl-reveal-section mt-4"><InsightGenerator publicDemo={publicDemo} state={insightState} onGenerate={generateInsights} reviewCount={displaySlice.kpis.nReviews} /></div>}
 
       {/* Analytical drill-down expands IN PLACE: clicking "View detailed
           validation" swaps this row for a full-width Trust panel (Evidence

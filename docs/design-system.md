@@ -1,6 +1,6 @@
 # Throughline interface
 
-The interface uses a calm analytical workspace with evidence followed by an explicit summary-generation step.
+The interface uses a calm analytical workspace with findings and actions before the evidence drill-down.
 
 ## Brand palette
 
@@ -24,7 +24,7 @@ These are interface interpretation thresholds, not external performance benchmar
 ## Demo and evidence behavior
 
 - Company choices stay visible and filter as the visitor types.
-- Generate insights & actions reveals the cached summary and recommendations in the public demo, with no live model call.
+- Cached findings and recommendations appear automatically below the KPI cards, with no live model call.
 - Snapshot dates describe the reviews actually present.
 - Replay is explicitly a demo; it does not collect new reviews.
 - Customer evidence is labeled as paraphrased and does not use direct quotation marks.
