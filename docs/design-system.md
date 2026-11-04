@@ -32,3 +32,7 @@ These are interface interpretation thresholds, not external performance benchmar
 - Compare uses the original floating right-edge tab. Its dialog supports Escape, focus containment and focus restoration.
 - Theme rows become stacked items on narrow screens, preserving the same evidence controls.
 - Reduced-motion preferences disable ornamental transitions.
+
+## Theme section
+
+The table and customer feedback share an introduction explaining what themes represent and how priorities are assessed. Visible guidance invites readers to select a theme to inspect supporting evidence. Sentiment filters follow this guidance on their own row.

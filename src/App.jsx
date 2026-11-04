@@ -1287,11 +1287,12 @@ function ThemeMatrix({ slice, reviewsById, activeTopic, onSelectTopic }) {
     <Card className="tl-theme-panel flex h-[540px] min-h-[540px] flex-col overflow-hidden">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-5 py-4">
         <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h2 className="text-[15px] font-bold" style={{ color: INK }}>Theme priorities</h2>
+          <h3 className="text-[15px] font-bold" style={{ color: INK }}>Theme priorities</h3>
           <HoverTip tip="Themes are ranked by estimated rating impact, evidence volume and sentiment. Select a row to inspect its reviews."><button type="button" aria-label="How themes are ranked" className="grid h-6 w-6 place-items-center rounded-full text-[#60758B] hover:bg-[#F5F0ED] hover:text-[#072D59]"><Info size={14} /></button></HoverTip>
           <span className="text-[11px] font-medium" style={{ color: INK3 }}>{slice.themes.length} ranked themes</span>
         </div>
-        <div className="ml-auto flex items-center gap-1.5">
+        <p className="tl-theme-instruction">Select a theme to inspect its evidence and related customer feedback.</p>
+        <div className="tl-theme-filters ml-auto flex items-center gap-1.5">
           <button aria-pressed={sentiment === "all"} onClick={() => setSentiment("all")}
             className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium shadow outline-none transition hover:-translate-y-px hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-1 ${
               sentiment === "all"
@@ -2498,7 +2499,13 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
           so both cards are the same height — tops AND bottoms aligned — reading
           as one coordinated section. (Sticky dropped: it left the panel a
           different height from the matrix, which read as misalignment.) */}
-      {showResolvedBody && <div className="tl-reveal-section mt-4 grid grid-cols-1 items-stretch gap-4 lg:grid-cols-10">
+      {showResolvedBody && <section className="tl-reveal-section mt-4" aria-labelledby="theme-evidence-title">
+        <div className="tl-evidence-intro">
+          <span className="tl-section-eyebrow">Explore the evidence</span>
+          <h2 id="theme-evidence-title">What’s driving the customer experience?</h2>
+          <p>Reviews are grouped into themes to show where the experience breaks down and what customers value. Priorities weigh estimated rating impact, review volume and strength of evidence.</p>
+        </div>
+        <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-10">
         <div className="h-full lg:col-span-7">
           <ThemeMatrix slice={displaySlice} reviewsById={reviewsById}
             activeTopic={resolvedTopic} onSelectTopic={setActiveTopic} />
@@ -2507,7 +2514,8 @@ function DashboardView({ store, setStore, reviewsById, liveRefreshState = "idle"
           <CustomerVoice slice={displaySlice} reviewsById={reviewsById}
             topicName={resolvedTopic} isDefault={!activeTopic} />
         </div>
-      </div>}
+        </div>
+      </section>}
 
 
       {/* Analytical drill-down expands IN PLACE: clicking "View detailed

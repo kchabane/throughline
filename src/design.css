@@ -160,3 +160,11 @@ button:disabled { cursor: wait; }
   .tl-comparison-score::before { content: attr(data-company); display: block; margin-bottom: 3px; font-size: 11px; color: var(--tl-muted); }
   .tl-comparison-hover { display: none; }
 }
+
+/* Introduce the theme table and customer feedback as one evidence section. */
+.tl-evidence-intro { padding: 12px 0 20px; max-width: 760px; }
+.tl-section-eyebrow { display: block; color: var(--tl-muted); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+.tl-evidence-intro h2 { color: var(--tl-navy); font-size: clamp(20px,2.2vw,26px); font-weight: 650; line-height: 1.3; letter-spacing: -.025em; }
+.tl-evidence-intro p { margin-top: 10px; color: var(--tl-secondary); font-size: 13px; line-height: 1.7; max-width: 690px; }
+.tl-theme-instruction { flex-basis: 100%; color: var(--tl-muted); font-size: 12px; line-height: 1.6; }
+.tl-theme-filters { flex-basis: 100%; margin-left: 0; }
