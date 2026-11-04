@@ -27,3 +27,7 @@ Production build and whitespace checks passed. Browser inspection confirmed orig
 First circle-simplification comparison passed with no actionable visual fixes required.
 
 final result: passed
+
+## Approved B integration
+
+The selected B motion is shared between the study, entry screen and loader via SignalGraphic. Browser verification confirmed 18 fine tracks, eight moving strokes, the tl-flow-arrival animation and a stationary logo. The page fits the browser viewport. Screenshot: ../previews/throughline-approved-b-homepage.png. Production build and whitespace checks passed. Not published.

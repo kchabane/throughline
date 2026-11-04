@@ -1,0 +1,25 @@
+/* Approved B motion, shared by the product entry and comparison study. */
+.tl-ref-signal.tl-flow-varied .tl-ref-incoming-motion .rm { animation: tl-flow-arrival var(--arrival-duration) var(--arrival-delay) linear infinite; stroke-dasharray: var(--arrival-length) 112; stroke-width: var(--arrival-width); stroke: #072d59; }
+.tl-ref-signal.tl-flow-varied .tl-ref-incoming-motion .rm:nth-child(2n) { stroke: #427291; }
+.tl-ref-signal.tl-flow-varied .tl-ref-incoming-motion .rm:nth-child(3n) { stroke: #fd6e88; }
+.tl-ref-signal.tl-flow-varied .tl-ref-output-pulse { animation: tl-flow-release 4.7s -1.6s cubic-bezier(.16,.55,.45,1) infinite; stroke-width: 3.6px; stroke-dasharray: 12 112; }
+.tl-ref-signal.tl-flow-varied .tl-ref-incoming-base .rp, .tl-ref-signal.tl-flow-varied .tl-ref-converge .rc { opacity: .22; }
+.tl-ref-signal.tl-flow-varied .tl-ref-output { stroke: #e0a1af; stroke-width: 1.25px; }
+@keyframes tl-flow-arrival {
+  0% { stroke-dashoffset: 8; opacity: 0; }
+  14% { stroke-dashoffset: -2; opacity: .8; }
+  42% { stroke-dashoffset: -28; opacity: 1; }
+  71% { stroke-dashoffset: -72; opacity: 1; }
+  91% { stroke-dashoffset: -100; opacity: .15; }
+  100% { stroke-dashoffset: -111; opacity: 0; }
+}
+@keyframes tl-flow-release {
+  0% { stroke-dashoffset: 9; opacity: 0; }
+  12% { opacity: 1; }
+  70% { opacity: .85; }
+  100% { stroke-dashoffset: -112; opacity: 0; }
+}
+
+.tl-flow-extra-lines path { fill: none; stroke: #7996ad; stroke-width: .8px; opacity: .22; }
+.tl-flow-extra-lines path:nth-child(3n+1) { stroke: #d699a7; opacity: .28; }
+@media (prefers-reduced-motion: reduce) { .tl-ref-signal.tl-flow-varied .tl-ref-incoming-motion .rm, .tl-ref-signal.tl-flow-varied .tl-ref-output-pulse { display: none; } }
