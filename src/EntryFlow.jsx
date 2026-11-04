@@ -105,6 +105,9 @@ function ReferenceSignalGraphic({ compact = false, snippets = [] }) {
     "M652 164 C662 162 672 159 682 156",
     "M660 166 C668 162 674 159 682 156"
   ];
+  const signalPaths = incoming.map((path, index) =>
+    `${path} ${converge[index].replace(/^M[\d.]+ [\d.]+/, "")}`
+  );
   const textSnips = (snippets || []).filter(Boolean).slice(0, 4);
   return (
     <div className={`tl-ref-signal ${compact ? "is-compact" : ""}`} aria-hidden="true">
@@ -113,13 +116,19 @@ function ReferenceSignalGraphic({ compact = false, snippets = [] }) {
           {incoming.map((d,i)=><path key={i} d={d} className={`rp rp-${i+1}`}/>)}
         </g>
         <g className="tl-ref-incoming-motion">
-          {incoming.slice(0,8).map((d,i)=><path key={i} d={d} className={`rm rm-${i+1}`}/>)}
+          {signalPaths.map((d, i) => (
+            <g key={i} style={{ "--signal-delay": `${(i % 4) * .14}s` }}>
+              <path d={d} pathLength="100" className={`tl-signal-trail signal-${i % 3}`} />
+              <path d={d} pathLength="100" className={`tl-signal-packet signal-${i % 3}`} />
+            </g>
+          ))}
         </g>
         <g className="tl-ref-converge">
           {converge.map((d,i)=><path key={i} d={d} className={`rc rc-${i+1}`}/>)}
         </g>
         <path className="tl-ref-output" d="M754 156 C858 149 970 166 1088 163 C1202 160 1314 162 1448 162" />
-        <path className="tl-ref-output-pulse" d="M754 156 C858 149 970 166 1088 163 C1202 160 1314 162 1448 162" />
+        <path className="tl-signal-output-glow" pathLength="100" d="M754 156 C858 149 970 166 1088 163 C1202 160 1314 162 1448 162" />
+        <path className="tl-ref-output-pulse" pathLength="100" d="M754 156 C858 149 970 166 1088 163 C1202 160 1314 162 1448 162" />
         <g className="tl-ref-ticks">
           {[1088,1198,1302,1392].map((x,i)=><line key={i} x1={x-4} y1="163" x2={x+4} y2="163"/>)}
         </g>
@@ -131,6 +140,7 @@ function ReferenceSignalGraphic({ compact = false, snippets = [] }) {
         </g>
       </svg>
       <div className="tl-ref-hub">
+        <span className="tl-signal-orbit" />
         <span className="tl-ref-hub-mark"><i/><b/><i/></span>
         <span className="tl-ref-halo h1"/><span className="tl-ref-halo h2"/>
       </div>
