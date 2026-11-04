@@ -132,7 +132,6 @@ function ReferenceSignalGraphic({ compact = false, snippets = [] }) {
       </svg>
       <div className="tl-ref-hub">
         <span className="tl-ref-hub-mark"><i/><b/><i/></span>
-        <span className="tl-ref-halo h1"/><span className="tl-ref-halo h2"/>
       </div>
       {textSnips.length ? <div className="tl-ref-live-voices">
         {textSnips.map((t,i)=><span key={i} className={`lv lv-${i+1}`}>{t.length>58?`${t.slice(0,55)}…`:t}</span>)}

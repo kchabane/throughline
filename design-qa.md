@@ -1,14 +1,14 @@
-# Original animation refinement QA
+# Clean logo circle QA
 
-- Source visual truth: ../previews/throughline-original-restored-motion.png
-- Implementation: ../previews/throughline-original-refined.png
-- Combined comparison: ../previews/original-refinement-comparison.png (source above refinement, inspected together).
+- Source visual truth: ../previews/throughline-original-refined.png
+- Implementation: ../previews/throughline-clean-circle.png
+- Combined comparison: ../previews/clean-circle-comparison.png (source above refinement, inspected together).
 - Viewport: 1280 × 900 CSS px; matched 1280 × 240 px motif crops at x=0,y=100. No density normalization. Animation phases differ.
 - State: entry screen, no company selected.
 
 ## Findings
 
-No actionable P0/P1/P2 mismatches against the selected original structure and requested refinement. The original paths, 12 input tracks, convergence and output shape remain unchanged. Moving highlights are intentionally crisper and higher contrast; the logo adds a restrained 4.5% scale response at the outgoing highlight's peak.
+No actionable P0/P1/P2 mismatches against the selected original structure and requested refinement. The original paths, 12 input tracks, convergence and output shape remain unchanged. The requested circle simplification removes halo markup, concentric pseudo-elements and all disc/ring pumping. The disc keeps a soft shadow. Moving signals remain unchanged.
 
 ## Required surfaces
 
@@ -20,10 +20,10 @@ No actionable P0/P1/P2 mismatches against the selected original structure and re
 
 ## Checks and limits
 
-Production build and whitespace checks passed. Browser inspection confirmed original input duration (5.8 seconds) and new highlight/response animations. No browser console errors. At 375px, the document fits the viewport and the lighter mobile stroke rules apply. Existing reduced-motion rules remain in place; OS preference switching was not tested. Static screenshots cannot establish subjective motion quality or full accessibility compliance. No production publication occurred.
+Production build and whitespace checks passed. Browser inspection confirmed original input duration (5.8 seconds) and active highlight animations; disc and ring animation names are both none, halo count is zero and pseudo-elements are hidden. No browser console errors. At 375px, the document fits the viewport and the lighter mobile stroke rules apply. Existing reduced-motion rules remain in place; OS preference switching was not tested. Static screenshots cannot establish subjective motion quality or full accessibility compliance. No production publication occurred.
 
 ## Comparison history
 
-First refinement comparison passed with no actionable visual fixes required.
+First circle-simplification comparison passed with no actionable visual fixes required.
 
 final result: passed
