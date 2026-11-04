@@ -22,25 +22,33 @@ body { background: #f5f9fc; }
 /* B reuses the exact source paths, extending the highlight through convergence. */
 .study-varied .tl-ref-incoming-motion .rm { animation: study-arrival var(--arrival-duration) var(--arrival-delay) linear infinite; stroke-dasharray: var(--arrival-length) 112; stroke-width: var(--arrival-width); stroke: #072d59; }
 .study-varied .tl-ref-incoming-motion .rm:nth-child(2n) { stroke: #427291; }
-.study-varied .tl-ref-incoming-motion .rm:nth-child(3n) { stroke: #de8196; }
-.study-varied .tl-ref-output-pulse { animation: study-release 6.3s -1.6s cubic-bezier(.16,.55,.45,1) infinite; stroke-width: 2px; stroke-dasharray: 7 112; }
+.study-varied .tl-ref-incoming-motion .rm:nth-child(3n) { stroke: #fd6e88; }
+.study-varied .tl-ref-output-pulse { animation: study-release 4.7s -1.6s cubic-bezier(.16,.55,.45,1) infinite; stroke-width: 3.6px; stroke-dasharray: 12 112; }
 .study-footer { display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid #d5e1eb; margin-top: 28px; padding-top: 24px; color: #60758b; font-size: 12px; line-height: 1.6; }
 .study-footer a { color: #072d59; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
 .motion-study[data-paused="true"] *, .motion-study[data-paused="true"] *::before, .motion-study[data-paused="true"] *::after { animation-play-state: paused !important; }
 @keyframes study-arrival {
   0% { stroke-dashoffset: 8; opacity: 0; }
-  14% { stroke-dashoffset: -2; opacity: .45; }
-  42% { stroke-dashoffset: -28; opacity: .75; }
-  71% { stroke-dashoffset: -72; opacity: .85; }
+  14% { stroke-dashoffset: -2; opacity: .8; }
+  42% { stroke-dashoffset: -28; opacity: 1; }
+  71% { stroke-dashoffset: -72; opacity: 1; }
   91% { stroke-dashoffset: -100; opacity: .15; }
   100% { stroke-dashoffset: -111; opacity: 0; }
 }
 @keyframes study-release {
   0% { stroke-dashoffset: 9; opacity: 0; }
-  12% { opacity: .75; }
-  70% { opacity: .65; }
+  12% { opacity: 1; }
+  70% { opacity: .85; }
   100% { stroke-dashoffset: -112; opacity: 0; }
 }
+.study-varied .tl-ref-incoming-base .rp, .study-varied .tl-ref-converge .rc { opacity: .22; }
+.study-varied .tl-ref-output { stroke: #e0a1af; stroke-width: 1.25px; }
+.study-focus .study-comparison { grid-template-columns: minmax(0,1fr); }
+.study-focus .study-original { display: none; }
+.study-focus .study-version .tl-ref-signal { height: 280px; }
+.study-focus .study-version .tl-ref-hub { width: 112px; height: 112px; }
+.study-focus .tl-ref-hub-mark i { width: 14px; height: 3.5px; }
+.study-focus .tl-ref-hub-mark b { width: 18px; height: 18px; border-width: 3.5px; margin: 0 4px; }
 @media (max-width: 800px) {
   .motion-study { padding: 28px 24px; }
   .motion-study-header { flex-direction: column; gap: 24px; margin-bottom: 40px; }

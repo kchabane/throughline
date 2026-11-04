@@ -43,7 +43,7 @@ function StudySignal({ varied = false, compact = false, snippets = [] }) {
           {incoming.map((d,i)=><path key={i} d={d} className={`rp rp-${i+1}`}/>)}
         </g>
         <g className="tl-ref-incoming-motion">
-          {incoming.slice(0,8).map((d,i)=><path key={i} d={varied ? fullPaths[i] : d} pathLength={varied ? 100 : undefined} className={`rm rm-${i+1}`} style={varied ? { "--arrival-duration": `${4.8 + i * .43}s`, "--arrival-delay": `${i * -1.37}s`, "--arrival-width": `${1.1 + (i % 3) * .18}px`, "--arrival-length": `${4 + (i % 3) * 2}` } : undefined}/>)}
+          {incoming.slice(0,8).map((d,i)=><path key={i} d={varied ? fullPaths[i] : d} pathLength={varied ? 100 : undefined} className={`rm rm-${i+1}`} style={varied ? { "--arrival-duration": `${3.8 + i * .34}s`, "--arrival-delay": `${i * -1.37}s`, "--arrival-width": `${2.3 + (i % 3) * .45}px`, "--arrival-length": `${7 + (i % 3) * 3}` } : undefined}/>)}
         </g>
         <g className="tl-ref-converge">
           {converge.map((d,i)=><path key={i} d={d} className={`rc rc-${i+1}`}/>)}
@@ -72,18 +72,19 @@ function StudySignal({ varied = false, compact = false, snippets = [] }) {
 
 function MotionStudy() {
   const [paused, setPaused] = useState(false);
+  const [focused, setFocused] = useState(true);
   const [run, setRun] = useState(0);
-  return <main className="motion-study" data-paused={paused}>
+  return <main className={`motion-study ${focused ? "study-focus" : ""}`} data-paused={paused}>
     <header className="motion-study-header">
-      <div><p className="study-eyebrow">Throughline · motion study</p><h1>Same identity. Different rhythm.</h1><p>Compare the movement. The logo, paths and palette stay consistent.</p></div>
-      <div className="study-controls"><button type="button" aria-pressed={paused} onClick={() => setPaused(v=>!v)}>{paused ? "Play motion" : "Pause motion"}</button><button type="button" onClick={() => { setRun(v=>v+1); setPaused(false); }}>Restart both</button></div>
+      <div><p className="study-eyebrow">Throughline · motion study</p><h1>A clearer sense of flow.</h1><p>Stronger moving strokes. Quieter background lines. The same clean logo.</p></div>
+      <div className="study-controls"><button type="button" aria-pressed={!focused} onClick={() => setFocused(v=>!v)}>{focused ? "Compare with original" : "Focus on B"}</button><button type="button" aria-pressed={paused} onClick={() => setPaused(v=>!v)}>{paused ? "Play motion" : "Pause motion"}</button><button type="button" onClick={() => { setRun(v=>v+1); setPaused(false); }}>{focused ? "Restart motion" : "Restart both"}</button></div>
     </header>
     <div className="study-comparison" key={run}>
       <section className="study-version study-original" aria-labelledby="study-original-title">
         <p className="study-eyebrow">A · Baseline</p><h2 id="study-original-title">Original rhythm</h2><p>Regular traveling signals at the original speeds.</p><StudySignal />
       </section>
       <section className="study-version study-varied" aria-labelledby="study-varied-title">
-        <p className="study-eyebrow">B · Motion refinement</p><h2 id="study-varied-title">Varied flow</h2><p>Independent arrivals, a gentle pickup toward the logo, and a smooth release.</p><StudySignal varied />
+        <p className="study-eyebrow">B · Motion refinement</p><h2 id="study-varied-title">Varied flow</h2><p>Distinct strokes gather into a single, steady throughline. The circle stays still.</p><StudySignal varied />
       </section>
     </div>
     <footer className="study-footer">Watch for a few cycles. This is a separate study; the homepage has not changed.<a href="/">Back to the product</a></footer>
